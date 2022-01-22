@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.43928617, g: 0.48758954, b: 0.5678342, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5896,6 +5896,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2875151144201038387, guid: 593694cafec1fe94ca1e705d484ff7e2,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2875151144201038390, guid: 593694cafec1fe94ca1e705d484ff7e2,
         type: 3}
       propertyPath: moveSpeed
@@ -5910,6 +5915,11 @@ PrefabInstance:
         type: 3}
       propertyPath: floatSpeed
       value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 2875151144201038390, guid: 593694cafec1fe94ca1e705d484ff7e2,
+        type: 3}
+      propertyPath: cameraSphereCastRadius
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2875151144201038390, guid: 593694cafec1fe94ca1e705d484ff7e2,
         type: 3}
@@ -10805,7 +10815,7 @@ GameObject:
   - component: {fileID: 372069288}
   - component: {fileID: 372069291}
   - component: {fileID: 372069290}
-  - component: {fileID: 372069289}
+  - component: {fileID: 372069292}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
@@ -10827,20 +10837,6 @@ Transform:
   m_Father: {fileID: 210476846}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!64 &372069289
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 372069287}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &372069290
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -10888,6 +10884,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 372069287}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!65 &372069292
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 372069287}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 10, y: 0.5, z: 10}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &373682731
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -34876,8 +34885,8 @@ Camera:
   m_GameObject: {fileID: 1414941127}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.13697046, g: 0.32693517, b: 0.3584906, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
