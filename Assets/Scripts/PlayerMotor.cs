@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerMotor : MonoBehaviour {
 
-    [Header("General")]
+    [Header("General")] 
     [SerializeField] float boostSpeed = 40f;
     [SerializeField] float moveSpeed = 40f;
     [SerializeField] float floatSpeed = 40f;
@@ -56,6 +56,7 @@ public class PlayerMotor : MonoBehaviour {
 
     void Awake() {
         rb = GetComponent<Rigidbody>();
+        rb.freezeRotation = true;
         playerControls = new PlayerControls();
         mainCamera = Camera.main;
         numCollidersInModel = gameObject.GetComponentsInChildren<Collider>().Length;
@@ -289,7 +290,6 @@ public class PlayerMotor : MonoBehaviour {
         for (int i = 0; i < virtualCameras.Length - 1; i++) {
             virtualCameras[i].SetActive(i == zoomModifier);
         }
-
     }
 
     void OnDrawGizmos() {
