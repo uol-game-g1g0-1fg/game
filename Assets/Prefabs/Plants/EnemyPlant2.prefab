@@ -353,6 +353,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7642012252694998633}
   - component: {fileID: 7642012253216153814}
+  - component: {fileID: 2223485886377181993}
   m_Layer: 0
   m_Name: EnemyPlant2
   m_TagString: EnemyPlant
@@ -395,6 +396,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &2223485886377181993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7642012253216153813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff1599ea1a3e6db4b806e3d84b104189, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7642012253225114942
 GameObject:
   m_ObjectHideFlags: 0
@@ -436,7 +449,7 @@ ParticleSystem:
   m_GameObject: {fileID: 7642012253225114942}
   serializedVersion: 6
   lengthInSec: 2
-  simulationSpeed: 2
+  simulationSpeed: 1
   stopAction: 0
   cullingMode: 3
   ringBufferMode: 0
@@ -581,7 +594,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 0.64705884, b: 0, a: 0.50980395}
+      maxColor: {r: 0.19624421, g: 0.3962264, b: 0.3807066, a: 0.50980395}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
