@@ -16,7 +16,7 @@ public class PlayerMotor : MonoBehaviour {
     [SerializeField, Tooltip("Clamp rotation so that the player cannot face the camera.")] 
     bool useClampRotation = true;
     [SerializeField, Tooltip(("Use WA and WD to move left/right, W/D up/down"))]
-    private bool useControlScheme2;
+    bool useControlScheme2;
     
     [Header("Snap Left/Right Settings")]
     [SerializeField, Tooltip("Snap rotation to 90 degrees")] 
@@ -40,6 +40,12 @@ public class PlayerMotor : MonoBehaviour {
 
     [Header("Submarine Model")]
     [SerializeField] GameObject model;
+
+    [Header("Player Stats")] 
+    [SerializeField] float score = 0f;
+    [SerializeField] float health = 10f;
+    // FIXME after adding the Core pickup mechanic, this should be changed to init as false
+    [SerializeField] bool hasCore = true;
 
     Camera mainCamera;
 
@@ -110,6 +116,8 @@ public class PlayerMotor : MonoBehaviour {
             rb.AddForce(-transform.right * direction * moveSpeed);
         }
 
+        if (!hasCore) return;
+
         rb.AddForce(-ballast * transform.up * floatSpeed);
     }
 
@@ -132,7 +140,7 @@ public class PlayerMotor : MonoBehaviour {
                     }
                 }
             } else if (inputX != 0 && inputY > 0) {
-                // Player is attempting to move side to side with inter-cardinal
+                // Player is attempting to move side to side with inter-cardinal input
                 if (inputX > 0) {
                     playerVector = new Vector2(0, 1);
                 } else {
@@ -142,6 +150,7 @@ public class PlayerMotor : MonoBehaviour {
                 if (!boostPressed) {
                     ballast = 0;
                 }
+                
             } else if (inputY < 0) {
                 playerVector = Vector2.zero;
             }
@@ -238,6 +247,8 @@ public class PlayerMotor : MonoBehaviour {
     }
 
     void HandleBoost(InputAction.CallbackContext ctx) {
+         if (!hasCore) return;
+        
          if (ctx.performed && boostCooldown == false) {
              // Boost is ready and player pressed the button
              rb.AddForce(Vector3.up * boostSpeed, ForceMode.Impulse);
