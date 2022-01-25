@@ -1,6 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -40,14 +38,10 @@ public class PlayerMotor : MonoBehaviour {
     [SerializeField, Range(0, 10)] int mouseLookSpeed = 2;
     [SerializeField, Range(0, 50)] float mouseDistanceToTarget = 35f;
 
-    [Header("Camera Settings")] 
-    [SerializeField, Range(1, 5)] float cameraSphereCastRadius = 3f;
-    int numCollidersInModel;
-    Camera mainCamera;
-    public GameObject[] virtualCameras;
-
     [Header("Submarine Model")]
     [SerializeField] GameObject model;
+
+    Camera mainCamera;
 
     float ballast;
 
@@ -59,7 +53,6 @@ public class PlayerMotor : MonoBehaviour {
         rb.freezeRotation = true;
         playerControls = new PlayerControls();
         mainCamera = Camera.main;
-        numCollidersInModel = gameObject.GetComponentsInChildren<Collider>().Length;
 
         playerControls.Submarine.Enable();
         playerControls.Submarine.Boost.performed += HandleBoost;
@@ -73,8 +66,6 @@ public class PlayerMotor : MonoBehaviour {
         if (useSnapRotation) useMouseForLookAt = false;
         if (useMouseForLookAt) useSnapRotation = false;
 
-        HandleCameraSphereCollider();
-        
         if (useMouseForLookAt) {
             float rotateSpeed = (1 + (mouseLookSpeed / 10)) * Time.deltaTime;
 
@@ -274,27 +265,6 @@ public class PlayerMotor : MonoBehaviour {
         }
 
         boostCooldown = false;
-    }
-
-    void HandleCameraSphereCollider() {
-        int zoomModifier = 1 - numCollidersInModel;
-        Collider[] hitColliders = new Collider[virtualCameras.Length + numCollidersInModel];
-        
-        int numColliders = Physics.OverlapSphereNonAlloc(transform.position, cameraSphereCastRadius, hitColliders);
-
-        for (int i = 0; i < numColliders - numCollidersInModel; i++) {
-            zoomModifier++;
-        }
-        print(zoomModifier);
-
-        for (int i = 0; i < virtualCameras.Length - 1; i++) {
-            virtualCameras[i].SetActive(i == zoomModifier);
-        }
-    }
-
-    void OnDrawGizmos() {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, cameraSphereCastRadius);
     }
     
     float ConstrainAngle(float angle) {
