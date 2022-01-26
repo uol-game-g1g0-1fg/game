@@ -13,10 +13,12 @@ GameObject:
   - component: {fileID: 4412228153630045529}
   - component: {fileID: 2875151144201038389}
   - component: {fileID: 2875151144201038387}
+  - component: {fileID: 3136061676221247841}
   - component: {fileID: 2875151144201038388}
+  - component: {fileID: 142001335}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -30,7 +32,7 @@ Transform:
   m_GameObject: {fileID: 2875151144201038376}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 2.3, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
   m_Children:
   - {fileID: 2875151144395280504}
   - {fileID: 2875151145746642675}
@@ -49,9 +51,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba030f1da29603147b121dbb20225ec2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boostSpeed: 80
-  moveSpeed: 60
-  floatSpeed: 60
+  boostSpeed: 40
+  moveSpeed: 30
+  floatSpeed: 30
   torque: 60
   maxPitch: 13.5
   useClampRotation: 1
@@ -63,12 +65,10 @@ MonoBehaviour:
   useMouseForBallast: 0
   mouseLookSpeed: 2
   mouseDistanceToTarget: 35
-  cameraSphereCastRadius: 5
-  virtualCameras:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   model: {fileID: 2875151145746642676}
+  score: 0
+  health: 100
+  hasCore: 0
 --- !u!114 &4412228153630045529
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -81,6 +81,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26f70ffe28ef8be44beb54c502954fcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cameraSphereCastRadius: 3
+  virtualCameras: []
 --- !u!54 &2875151144201038389
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -110,6 +112,33 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 1.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3136061676221247841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2875151144201038376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b85c4721f34f2604d8e0eec9af3f5131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameEvent: {fileID: 11400000, guid: 8d592c2d1bd767a4b80813fdaa960f58, type: 2}
+  unityEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2875151144201038390}
+        m_MethodName: EnableCore
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2875151144201038388
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -125,6 +154,23 @@ MonoBehaviour:
   idleSnapshot: {fileID: 24500006, guid: 99cdaf8dbb01ad240a0c08cc79f47caa, type: 2}
   battleSnapshot: {fileID: -6958439973865901825, guid: 99cdaf8dbb01ad240a0c08cc79f47caa,
     type: 2}
+--- !u!114 &142001335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2875151144201038376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26f70ffe28ef8be44beb54c502954fcd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraSphereCastRadius: 3
+  virtualCameras:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1 &2875151144395280505
 GameObject:
   m_ObjectHideFlags: 0

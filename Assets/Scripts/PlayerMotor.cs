@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -65,6 +67,7 @@ public class PlayerMotor : MonoBehaviour {
         playerControls.Submarine.Boost.canceled += HandleBoost;
         playerControls.Submarine.Ballast.performed += HandleBallast;
         playerControls.Submarine.Ballast.canceled += HandleBallast;
+        
     }
 
     void Update() {
@@ -97,6 +100,10 @@ public class PlayerMotor : MonoBehaviour {
         HandleMovement(inputVector);
         HandleRotation(inputVector);
         HandlePitch(inputVector);
+    }
+
+    public void EnableCore() {
+        hasCore = true;
     }
 
     void HandleMovement(Vector2 inputVector) {
