@@ -8,13 +8,11 @@ public class CameraController : MonoBehaviour {
     Camera mainCamera;
     public GameObject[] virtualCameras;
     
-    // Start is called before the first frame update
     void Awake() {
         mainCamera = Camera.main;
         numCollidersInModel = gameObject.GetComponentsInChildren<Collider>().Length;
     }
 
-    // Update is called once per frame
     void Update() {
         HandleCameraSphereCollider();
     }
