@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PickupController : MonoBehaviour {
     float pickupRadius;
@@ -11,10 +8,6 @@ public class PickupController : MonoBehaviour {
     [SerializeField] GameEvent OnPickup;
     [SerializeField] float journeyTime = 1.0f;
     
-    void Awake() {
-        pickupRadius = transform.GetComponent<SphereCollider>().radius;
-    }
-
     void Update() {
         if (!enableAnimation) return;
 
@@ -24,11 +17,6 @@ public class PickupController : MonoBehaviour {
         }
         
         transform.position = Vector3.Slerp(transform.position, player.transform.position, journeyTime);
-    }
-    
-    void OnDrawGizmos() {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, pickupRadius);
     }
 
     void OnTriggerEnter(Collider collider) {
