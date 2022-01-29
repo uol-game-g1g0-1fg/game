@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - DangerZone
+  - EnemyPlant
+  - ObjectPoolMgr
+  - Spawner
+  - Pickup
   layers:
   - Default
   - TransparentFX

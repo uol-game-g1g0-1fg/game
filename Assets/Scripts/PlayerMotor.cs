@@ -1,7 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Cinemachine;
+﻿using System;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -18,7 +18,7 @@ public class PlayerMotor : MonoBehaviour {
     [SerializeField, Tooltip("Clamp rotation so that the player cannot face the camera.")] 
     bool useClampRotation = true;
     [SerializeField, Tooltip(("Use WA and WD to move left/right, W/D up/down"))]
-    private bool useControlScheme2;
+    bool useControlScheme2;
     
     [Header("Snap Left/Right Settings")]
     [SerializeField, Tooltip("Snap rotation to 90 degrees")] 
@@ -40,14 +40,16 @@ public class PlayerMotor : MonoBehaviour {
     [SerializeField, Range(0, 10)] int mouseLookSpeed = 2;
     [SerializeField, Range(0, 50)] float mouseDistanceToTarget = 35f;
 
-    [Header("Camera Settings")] 
-    [SerializeField, Range(1, 5)] float cameraSphereCastRadius = 3f;
-    int numCollidersInModel;
-    Camera mainCamera;
-    public GameObject[] virtualCameras;
-
     [Header("Submarine Model")]
     [SerializeField] GameObject model;
+
+    [Header("Player Stats")] 
+    [SerializeField] float score = 0f;
+    [SerializeField] float health = 10f;
+    // FIXME after adding the Core pickup mechanic, this should be changed to init as false
+    [SerializeField] bool hasCore = true;
+
+    Camera mainCamera;
 
     float ballast;
 
@@ -59,13 +61,13 @@ public class PlayerMotor : MonoBehaviour {
         rb.freezeRotation = true;
         playerControls = new PlayerControls();
         mainCamera = Camera.main;
-        numCollidersInModel = gameObject.GetComponentsInChildren<Collider>().Length;
 
         playerControls.Submarine.Enable();
         playerControls.Submarine.Boost.performed += HandleBoost;
         playerControls.Submarine.Boost.canceled += HandleBoost;
         playerControls.Submarine.Ballast.performed += HandleBallast;
         playerControls.Submarine.Ballast.canceled += HandleBallast;
+        
     }
 
     void Update() {
@@ -73,8 +75,6 @@ public class PlayerMotor : MonoBehaviour {
         if (useSnapRotation) useMouseForLookAt = false;
         if (useMouseForLookAt) useSnapRotation = false;
 
-        HandleCameraSphereCollider();
-        
         if (useMouseForLookAt) {
             float rotateSpeed = (1 + (mouseLookSpeed / 10)) * Time.deltaTime;
 
@@ -102,6 +102,10 @@ public class PlayerMotor : MonoBehaviour {
         HandlePitch(inputVector);
     }
 
+    public void EnableCore() {
+        hasCore = true;
+    }
+
     void HandleMovement(Vector2 inputVector) {
         float direction;
         
@@ -118,6 +122,8 @@ public class PlayerMotor : MonoBehaviour {
         } else if (inputVector.y < 0) {
             rb.AddForce(-transform.right * direction * moveSpeed);
         }
+
+        if (!hasCore) return;
 
         rb.AddForce(-ballast * transform.up * floatSpeed);
     }
@@ -141,7 +147,7 @@ public class PlayerMotor : MonoBehaviour {
                     }
                 }
             } else if (inputX != 0 && inputY > 0) {
-                // Player is attempting to move side to side with inter-cardinal
+                // Player is attempting to move side to side with inter-cardinal input
                 if (inputX > 0) {
                     playerVector = new Vector2(0, 1);
                 } else {
@@ -151,6 +157,7 @@ public class PlayerMotor : MonoBehaviour {
                 if (!boostPressed) {
                     ballast = 0;
                 }
+                
             } else if (inputY < 0) {
                 playerVector = Vector2.zero;
             }
@@ -247,6 +254,8 @@ public class PlayerMotor : MonoBehaviour {
     }
 
     void HandleBoost(InputAction.CallbackContext ctx) {
+         if (!hasCore) return;
+        
          if (ctx.performed && boostCooldown == false) {
              // Boost is ready and player pressed the button
              rb.AddForce(Vector3.up * boostSpeed, ForceMode.Impulse);
@@ -274,27 +283,6 @@ public class PlayerMotor : MonoBehaviour {
         }
 
         boostCooldown = false;
-    }
-
-    void HandleCameraSphereCollider() {
-        int zoomModifier = 1 - numCollidersInModel;
-        Collider[] hitColliders = new Collider[virtualCameras.Length + numCollidersInModel];
-        
-        int numColliders = Physics.OverlapSphereNonAlloc(transform.position, cameraSphereCastRadius, hitColliders);
-
-        for (int i = 0; i < numColliders - numCollidersInModel; i++) {
-            zoomModifier++;
-        }
-        print(zoomModifier);
-
-        for (int i = 0; i < virtualCameras.Length - 1; i++) {
-            virtualCameras[i].SetActive(i == zoomModifier);
-        }
-    }
-
-    void OnDrawGizmos() {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, cameraSphereCastRadius);
     }
     
     float ConstrainAngle(float angle) {
