@@ -14,6 +14,7 @@ namespace BehavioursFSM
 
         #region VirtualMethods
         public virtual void Enter() {}
+        public virtual void FixedUpdate() { }
         public virtual void Update() {}
         public virtual void Exit() {}
         #endregion
@@ -61,9 +62,13 @@ namespace BehavioursFSM
             m_CurrentState?.Enter();
         }
 
+        public void FixedUpdate()
+        {
+            m_CurrentState?.FixedUpdate();Update();
+        }
+
         public void Update()
         {
-            // If the current state is not null, update the state.
             m_CurrentState?.Update();
         }
     }
