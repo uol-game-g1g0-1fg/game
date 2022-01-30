@@ -68,6 +68,7 @@ MonoBehaviour:
   mouseDistanceToTarget: 35
   model: {fileID: 2875151145746642676}
   collisionForce: 250
+  OnCollision: {fileID: 11400000, guid: 0d801ab9e364c6942874acd12f5ab31d, type: 2}
   score: 0
   health: 100
   hasCore: 0

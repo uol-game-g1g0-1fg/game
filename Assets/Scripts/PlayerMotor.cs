@@ -45,6 +45,9 @@ public class PlayerMotor : MonoBehaviour {
     [SerializeField] GameObject model;
     [SerializeField] float collisionForce = 250f;
 
+    [Header("Events")] 
+    [SerializeField] GameEvent OnCollision;
+
     [Header("Player Stats")] 
     [SerializeField] float score = 0f;
     [SerializeField] float health = 10f;
@@ -113,7 +116,10 @@ public class PlayerMotor : MonoBehaviour {
             dir = -dir.normalized;
             // And finally we add force in the direction of dir and multiply it by force. 
             // This will push back the player
-            rb.AddForce(dir * rb.velocity.magnitude * collisionForce);
+            var playerForce = Mathf.Clamp(rb.velocity.magnitude, 0.02f, 1f);
+            rb.AddForce(dir * playerForce * collisionForce);
+            
+            OnCollision?.Invoke();
         }
     }
 
