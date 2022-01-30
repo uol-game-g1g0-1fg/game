@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8440038914602996513}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ProjectileSpawnPoint
   m_TagString: ProjectileSpawnPoint
   m_Icon: {fileID: 0}
@@ -39,7 +39,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7642012252304433305}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,7 +72,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7642012252574421158}
   - component: {fileID: 7642012252574421159}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: EnemyPlant2Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -162,7 +162,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7642012252691456038}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Stem2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -193,7 +193,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7642012252831272280}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Arm4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -224,7 +224,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7642012252839279169}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Arm1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -255,7 +255,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7642012252947055745}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Arm2_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -285,7 +285,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7642012252981711477}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Stem3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -320,7 +320,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7642012253171628886}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Root
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -351,7 +351,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7642012253207142990}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: EnemyPlant2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -384,7 +384,8 @@ GameObject:
   - component: {fileID: 7642012252694998633}
   - component: {fileID: 8071400073452959210}
   - component: {fileID: 2223485886377181993}
-  m_Layer: 0
+  - component: {fileID: 7270242253910021945}
+  m_Layer: 10
   m_Name: EnemyPlant2
   m_TagString: EnemyPlant
   m_Icon: {fileID: 0}
@@ -443,9 +444,22 @@ MonoBehaviour:
   m_EnemyPlantProjectile: {fileID: 849066391972718375, guid: feeb0ae4db0bc3146b9e667e2d5948dd,
     type: 3}
   m_EnemyPlantProjectileSpeed: 100
-  m_EnemyPlantLOSRadius: 3.5
+  m_EnemyPlantLOSRadius: 4.5
   m_TimeBetweenAttacks: 2
   m_EnemyPlantAnimator: {fileID: 8071400073452959210}
+--- !u!65 &7270242253910021945
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7642012253216153813}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 3.5177925, z: 1}
+  m_Center: {x: 0, y: 1.258896, z: 0}
 --- !u!1 &7642012253225114942
 GameObject:
   m_ObjectHideFlags: 0
@@ -457,7 +471,7 @@ GameObject:
   - component: {fileID: 7642012253225114913}
   - component: {fileID: 7642012253225114912}
   - component: {fileID: 7642012253225114943}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: EnemyPlant2Spores
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5074,7 +5088,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7642012253318444053}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Arm4_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5104,7 +5118,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7642012253353838147}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Arm2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5135,7 +5149,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7642012253435588988}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Arm3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5166,7 +5180,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7642012253503987935}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Arm1_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5196,7 +5210,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7642012254090287444}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Arm3_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5226,7 +5240,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7642012254277331632}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Head_end
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5256,7 +5270,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7642012254336139467}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Stem1
   m_TagString: Untagged
   m_Icon: {fileID: 0}

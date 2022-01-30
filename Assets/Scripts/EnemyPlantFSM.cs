@@ -65,7 +65,7 @@ namespace EnemyBehaviour
         public enum StateTypes { IDLE = 0, ATTACK, DIE }
 
         private EnemyPlantState m_State = null;
-        private float m_MinLOSDot = 0.3f;
+        private float m_MaxLOSDot = 0.2f;
         private float m_TimeSinceLastAttack = 0;
         private Rigidbody rbProjectile;
 
@@ -92,9 +92,7 @@ namespace EnemyBehaviour
         private bool IsWithinRange()
         {
             float dist = Vector3.Distance(m_TargetEntity.transform.position,m_EnemyPlantGameObject.transform.position);
-
-            // I'm not sure we need this angle check for plants, commenting for now
-            if (dist < m_EnemyPlantLOSRadius /*&& GetAngleToTarget() > m_MinLOSDot*/)
+            if (dist < m_EnemyPlantLOSRadius && GetAngleToTarget() <= m_MaxLOSDot)
             {
                 return true;
             }
@@ -104,9 +102,9 @@ namespace EnemyBehaviour
 
         private float GetAngleToTarget()
         {
-            Vector3 forward = m_TargetEntity.transform.TransformDirection(Vector3.forward);
+            Vector3 up = m_TargetEntity.transform.TransformDirection(Vector3.up);
             Vector3 toEnemy = (m_EnemyPlantGameObject.transform.position - m_TargetEntity.transform.position).normalized;
-            return Vector3.Dot(forward, toEnemy);
+            return Vector3.Dot(up, toEnemy);
         }
 
         #endregion
