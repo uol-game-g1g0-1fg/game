@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -42,6 +43,7 @@ public class PlayerMotor : MonoBehaviour {
 
     [Header("Submarine Model")]
     [SerializeField] GameObject model;
+    [SerializeField] float collisionForce = 250f;
 
     [Header("Player Stats")] 
     [SerializeField] float score = 0f;
@@ -100,6 +102,19 @@ public class PlayerMotor : MonoBehaviour {
         HandleMovement(inputVector);
         HandleRotation(inputVector);
         HandlePitch(inputVector);
+    }
+
+    void OnCollisionEnter(Collision col) {
+        // Do not bounce on the Floor
+        if (col.gameObject.tag != "Ground") {
+            // Calculate Angle Between the collision point and the player
+            var dir = col.contacts[0].point - transform.position;
+            // We then get the opposite (-Vector3) and normalize it
+            dir = -dir.normalized;
+            // And finally we add force in the direction of dir and multiply it by force. 
+            // This will push back the player
+            rb.AddForce(dir * rb.velocity.magnitude * collisionForce);
+        }
     }
 
     public void EnableCore() {

@@ -67,6 +67,7 @@ MonoBehaviour:
   mouseLookSpeed: 2
   mouseDistanceToTarget: 35
   model: {fileID: 2875151145746642676}
+  collisionForce: 250
   score: 0
   health: 100
   hasCore: 0

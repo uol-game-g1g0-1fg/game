@@ -9,6 +9,7 @@ TagManager:
   - ObjectPoolMgr
   - Spawner
   - Pickup
+  - Ground
   layers:
   - Default
   - TransparentFX

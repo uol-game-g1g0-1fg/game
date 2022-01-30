@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.43928617, g: 0.48758954, b: 0.5678342, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4571,6 +4571,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: CoralRock3 (12)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5826118201137868251, guid: ea54f979389e30d4c8ee281103b05458,
+        type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ea54f979389e30d4c8ee281103b05458, type: 3}
@@ -10875,7 +10880,7 @@ GameObject:
   - component: {fileID: 372069292}
   m_Layer: 0
   m_Name: Plane
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -39755,6 +39760,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: CoralRock1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6465243836769977568, guid: ff9a1359999b2914bb4d6bae48ca1814,
+        type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 6531133674240507797, guid: ff9a1359999b2914bb4d6bae48ca1814,
         type: 3}
