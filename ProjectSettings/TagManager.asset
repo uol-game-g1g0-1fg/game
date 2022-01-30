@@ -9,6 +9,8 @@ TagManager:
   - ObjectPoolMgr
   - Spawner
   - Pickup
+  - PlantProjectile
+  - ProjectileSpawnPoint
   layers:
   - Default
   - TransparentFX

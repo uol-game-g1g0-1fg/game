@@ -7,9 +7,9 @@ public class GameObjectPoolManager : MonoBehaviour
     [System.Serializable]
     public class Pool
     {
-        public string tag;
-        public GameObject prefab;
-        public int size;
+        public string m_Tag;
+        public GameObject m_Prefab;
+        public int m_Size;
     }
 
     #region Singleton
@@ -34,16 +34,16 @@ public class GameObjectPoolManager : MonoBehaviour
         {
             Queue<GameObject> objectPool = new Queue<GameObject>();
 
-            for (int i = 0; i < pool.size; ++i)
+            for (int i = 0; i < pool.m_Size; ++i)
             {
-                GameObject obj = Instantiate(pool.prefab);
+                GameObject obj = Instantiate(pool.m_Prefab);
                 obj.SetActive(false);
                 obj.transform.SetParent(transform); // Keep the inactive objects inside the pool manager hierarchy
                 objectPool.Enqueue(obj);
             }
 
             // Fills the pool dict with each queue
-            poolDictionary.Add(pool.tag, objectPool);
+            poolDictionary.Add(pool.m_Tag, objectPool);
         }
     }
 
@@ -65,5 +65,16 @@ public class GameObjectPoolManager : MonoBehaviour
         poolDictionary[tag].Enqueue(objectToSpawn);
 
         return objectToSpawn;
+    }
+
+    public bool IsInitialised()
+    {
+        if (poolDictionary == null || pools == null)
+            return false;
+
+        if (poolDictionary.Count != pools.Count)
+            return false;
+
+        return true;
     }
 }

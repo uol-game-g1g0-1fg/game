@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: EnemyPlant2Material
   m_Shader: {fileID: 210, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: _ALPHABLEND_ON _NORMALMAP
+  m_ShaderKeywords: _ALPHABLEND_ON _EMISSION _NORMALMAP
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -39,11 +39,11 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
         m_Texture: {fileID: 2800000, guid: 1c46007e823bd5345bb85a9cbb9c8150, type: 3}
-        m_Scale: {x: 2, y: 1}
+        m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 2800000, guid: 68554dbe21859c34ab4dcdd0322c4976, type: 3}
-        m_Scale: {x: 2, y: 1}
+        m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
@@ -71,10 +71,10 @@ Material:
     - _DistortionStrength: 1
     - _DistortionStrengthScaled: 0
     - _DstBlend: 10
-    - _EmissionEnabled: 0
+    - _EmissionEnabled: 1
     - _FlipbookMode: 0
     - _GlossMapScale: 1
-    - _Glossiness: 0.2
+    - _Glossiness: 0.464
     - _GlossyReflections: 1
     - _LightingEnabled: 1
     - _Metallic: 0.1
@@ -91,6 +91,6 @@ Material:
     - _ZWrite: 0
     m_Colors:
     - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
-    - _Color: {r: 0.5283019, g: 0.4261303, b: 0.47356713, a: 1}
-    - _EmissionColor: {r: 1.6390274, g: 1.0618093, b: 0.9818702, a: 1}
+    - _Color: {r: 0.754717, g: 0.30082786, b: 0.2242791, a: 1}
+    - _EmissionColor: {r: 1.0348731, g: 0.5113564, b: 0.3563478, a: 1}
     - _SoftParticleFadeParams: {r: 0, g: 0, b: 0, a: 0}
