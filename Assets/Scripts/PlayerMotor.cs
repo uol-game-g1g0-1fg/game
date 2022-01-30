@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -42,6 +43,18 @@ public class PlayerMotor : MonoBehaviour {
 
     [Header("Submarine Model")]
     [SerializeField] GameObject model;
+    [SerializeField] float collisionForce = 250f;
+    
+    [Header("Tools")]
+    [SerializeField] GameObject harpoon;
+    [SerializeField] GameObject harpoonSpawnPoint;
+    [SerializeField] float harpoonForce = 8000f;
+    [SerializeField] float fireRate = 0.1f;
+    [SerializeField] GameEvent OnFire;
+    float nextFire = 0.0f;
+
+    [Header("Events")] 
+    [SerializeField] GameEvent OnCollision;
 
     [Header("Player Stats")] 
     [SerializeField] float score = 0f;
@@ -67,7 +80,8 @@ public class PlayerMotor : MonoBehaviour {
         playerControls.Submarine.Boost.canceled += HandleBoost;
         playerControls.Submarine.Ballast.performed += HandleBallast;
         playerControls.Submarine.Ballast.canceled += HandleBallast;
-        
+        playerControls.Submarine.Harpoon.performed += FireHarpoon;
+
     }
 
     void Update() {
@@ -100,6 +114,22 @@ public class PlayerMotor : MonoBehaviour {
         HandleMovement(inputVector);
         HandleRotation(inputVector);
         HandlePitch(inputVector);
+    }
+
+    void OnCollisionEnter(Collision col) {
+        // Do not bounce on the Floor
+        if (col.gameObject.tag != "Ground") {
+            // Calculate Angle Between the collision point and the player
+            var dir = col.contacts[0].point - transform.position;
+            // We then get the opposite (-Vector3) and normalize it
+            dir = -dir.normalized;
+            // And finally we add force in the direction of dir and multiply it by force. 
+            // This will push back the player
+            var playerForce = Mathf.Clamp(rb.velocity.magnitude, 0.02f, 1f);
+            rb.AddForce(dir * playerForce * collisionForce);
+            
+            OnCollision?.Invoke();
+        }
     }
 
     public void EnableCore() {
@@ -283,6 +313,19 @@ public class PlayerMotor : MonoBehaviour {
         }
 
         boostCooldown = false;
+    }
+
+    void FireHarpoon(InputAction.CallbackContext ctx) {
+        if (nextFire <= Time.time) {
+            nextFire = Time.time + fireRate;
+            // Instantiate the projectile at the position and rotation of this transform
+            var clone = Instantiate(harpoon, harpoonSpawnPoint.transform.position, transform.rotation);
+            // Give the cloned object an initial velocity along the current 
+            // object's Z axis
+            clone.transform.Rotate(-15, 0, 0);
+            clone.GetComponent<Rigidbody>().AddForce(model.transform.forward * harpoonForce);
+            OnFire?.Invoke();
+        }
     }
     
     float ConstrainAngle(float angle) {

@@ -28,6 +28,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "Harpoon",
+                    "type": "Button",
+                    "id": "9c850ace-a8ac-428c-b38d-8c9e53b8332b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -129,6 +137,17 @@
                     "action": "Ballast",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "c2f6b704-d0d2-45a4-858f-104f002b521c",
+                    "path": "<Keyboard>/f",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Harpoon",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

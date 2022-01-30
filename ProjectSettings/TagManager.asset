@@ -11,6 +11,7 @@ TagManager:
   - Pickup
   - PlantProjectile
   - ProjectileSpawnPoint
+  - Ground
   layers:
   - Default
   - TransparentFX
@@ -23,7 +24,7 @@ TagManager:
   - Environment
   - Player
   - EnemyPlant
-  - 
+  - Harpoon
   - 
   - 
   - 
