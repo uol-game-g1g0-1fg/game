@@ -44,6 +44,14 @@ public class PlayerMotor : MonoBehaviour {
     [Header("Submarine Model")]
     [SerializeField] GameObject model;
     [SerializeField] float collisionForce = 250f;
+    
+    [Header("Tools")]
+    [SerializeField] GameObject harpoon;
+    [SerializeField] GameObject harpoonSpawnPoint;
+    [SerializeField] float harpoonForce = 8000f;
+    [SerializeField] float fireRate = 0.1f;
+    [SerializeField] GameEvent OnFire;
+    float nextFire = 0.0f;
 
     [Header("Events")] 
     [SerializeField] GameEvent OnCollision;
@@ -72,7 +80,8 @@ public class PlayerMotor : MonoBehaviour {
         playerControls.Submarine.Boost.canceled += HandleBoost;
         playerControls.Submarine.Ballast.performed += HandleBallast;
         playerControls.Submarine.Ballast.canceled += HandleBallast;
-        
+        playerControls.Submarine.Harpoon.performed += FireHarpoon;
+
     }
 
     void Update() {
@@ -304,6 +313,19 @@ public class PlayerMotor : MonoBehaviour {
         }
 
         boostCooldown = false;
+    }
+
+    void FireHarpoon(InputAction.CallbackContext ctx) {
+        if (nextFire <= Time.time) {
+            nextFire = Time.time + fireRate;
+            // Instantiate the projectile at the position and rotation of this transform
+            var clone = Instantiate(harpoon, harpoonSpawnPoint.transform.position, transform.rotation);
+            // Give the cloned object an initial velocity along the current 
+            // object's Z axis
+            clone.transform.Rotate(-15, 0, 0);
+            clone.GetComponent<Rigidbody>().AddForce(model.transform.forward * harpoonForce);
+            OnFire?.Invoke();
+        }
     }
     
     float ConstrainAngle(float angle) {

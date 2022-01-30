@@ -41,6 +41,14 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Harpoon"",
+                    ""type"": ""Button"",
+                    ""id"": ""9c850ace-a8ac-428c-b38d-8c9e53b8332b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -142,6 +150,17 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""action"": ""Ballast"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c2f6b704-d0d2-45a4-858f-104f002b521c"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Harpoon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -153,6 +172,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_Submarine_Boost = m_Submarine.FindAction("Boost", throwIfNotFound: true);
         m_Submarine_Movement = m_Submarine.FindAction("Movement", throwIfNotFound: true);
         m_Submarine_Ballast = m_Submarine.FindAction("Ballast", throwIfNotFound: true);
+        m_Submarine_Harpoon = m_Submarine.FindAction("Harpoon", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -205,6 +225,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputAction m_Submarine_Boost;
     private readonly InputAction m_Submarine_Movement;
     private readonly InputAction m_Submarine_Ballast;
+    private readonly InputAction m_Submarine_Harpoon;
     public struct SubmarineActions
     {
         private @PlayerControls m_Wrapper;
@@ -212,6 +233,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         public InputAction @Boost => m_Wrapper.m_Submarine_Boost;
         public InputAction @Movement => m_Wrapper.m_Submarine_Movement;
         public InputAction @Ballast => m_Wrapper.m_Submarine_Ballast;
+        public InputAction @Harpoon => m_Wrapper.m_Submarine_Harpoon;
         public InputActionMap Get() { return m_Wrapper.m_Submarine; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -230,6 +252,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Ballast.started -= m_Wrapper.m_SubmarineActionsCallbackInterface.OnBallast;
                 @Ballast.performed -= m_Wrapper.m_SubmarineActionsCallbackInterface.OnBallast;
                 @Ballast.canceled -= m_Wrapper.m_SubmarineActionsCallbackInterface.OnBallast;
+                @Harpoon.started -= m_Wrapper.m_SubmarineActionsCallbackInterface.OnHarpoon;
+                @Harpoon.performed -= m_Wrapper.m_SubmarineActionsCallbackInterface.OnHarpoon;
+                @Harpoon.canceled -= m_Wrapper.m_SubmarineActionsCallbackInterface.OnHarpoon;
             }
             m_Wrapper.m_SubmarineActionsCallbackInterface = instance;
             if (instance != null)
@@ -243,6 +268,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Ballast.started += instance.OnBallast;
                 @Ballast.performed += instance.OnBallast;
                 @Ballast.canceled += instance.OnBallast;
+                @Harpoon.started += instance.OnHarpoon;
+                @Harpoon.performed += instance.OnHarpoon;
+                @Harpoon.canceled += instance.OnHarpoon;
             }
         }
     }
@@ -252,5 +280,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnBoost(InputAction.CallbackContext context);
         void OnMovement(InputAction.CallbackContext context);
         void OnBallast(InputAction.CallbackContext context);
+        void OnHarpoon(InputAction.CallbackContext context);
     }
 }
