@@ -153,6 +153,8 @@ MonoBehaviour:
   armState: 0
   OnCollision: {fileID: 11400000, guid: 0d801ab9e364c6942874acd12f5ab31d, type: 2}
   OnEnableCore: {fileID: 11400000, guid: 11ee416b49b7cb04c93b6fb25cd267e7, type: 2}
+  OnExtendArm: {fileID: 11400000, guid: d0d2880d33a49444aa9fa95f95c3520d, type: 2}
+  OnRetractArm: {fileID: 11400000, guid: fc7b70a8e89a097419e3f2d3b17dbf96, type: 2}
   score: 0
   health: 100
   enableCore: 0
