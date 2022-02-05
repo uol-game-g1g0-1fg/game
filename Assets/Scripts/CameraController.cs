@@ -26,7 +26,7 @@ public class CameraController : MonoBehaviour {
         for (int i = 0; i < numColliders - numCollidersInModel; i++) {
             zoomModifier++;
         }
-        print(zoomModifier);
+        //Debug.Log("Camera Zoom: " + zoomModifier);
 
         for (int i = 0; i < virtualCameras.Length - 1; i++) {
             virtualCameras[i].SetActive(i == zoomModifier);
