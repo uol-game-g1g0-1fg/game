@@ -3,7 +3,7 @@
 public class PickupController : MonoBehaviour {
     float pickupRadius;
     bool enableAnimation;
-    GameObject player;
+    GameObject arm;
     
     [SerializeField] GameEvent OnPickup;
     [SerializeField] float journeyTime = 1.0f;
@@ -11,23 +11,24 @@ public class PickupController : MonoBehaviour {
     void Update() {
         if (!enableAnimation) return;
 
-        if (Vector3.Distance(transform.position, player.transform.position) < .1f) {
-            PublishEventAndDestroy();
+        if (Vector3.Distance(transform.position, arm.transform.position) < .1f) {
+            OnPickup?.Invoke();
             return;
         }
-        
-        transform.position = Vector3.Slerp(transform.position, player.transform.position, journeyTime);
+
+        this.transform.parent = arm.transform;
+        transform.position = Vector3.Slerp(transform.position, arm.transform.position, journeyTime);
     }
 
     void OnTriggerEnter(Collider collider) {
-        if (collider.gameObject.tag == "Player") {
+        // Debug.Log("Pickup collided with " + collider.gameObject.name);
+        if (collider.gameObject.tag == "MechArm") {
             enableAnimation = true;
-            player = collider.gameObject;
+            arm = collider.gameObject;
         }
     }
 
-    void PublishEventAndDestroy() {
-        OnPickup?.Invoke();
-        DestroyImmediate(this.gameObject);
+    void DestroyPickup() {
+        Destroy(this.gameObject);
     }
 }

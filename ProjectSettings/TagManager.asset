@@ -12,6 +12,7 @@ TagManager:
   - PlantProjectile
   - ProjectileSpawnPoint
   - Ground
+  - MechArm
   layers:
   - Default
   - TransparentFX

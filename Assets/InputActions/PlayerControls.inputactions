@@ -35,6 +35,14 @@
                     "id": "9c850ace-a8ac-428c-b38d-8c9e53b8332b",
                     "expectedControlType": "Button",
                     "processors": "",
+                    "interactions": "Press"
+                },
+                {
+                    "name": "Arm",
+                    "type": "Button",
+                    "id": "7c41af38-95f3-4318-93cf-47212b6e5ce5",
+                    "expectedControlType": "Button",
+                    "processors": "",
                     "interactions": ""
                 }
             ],
@@ -146,6 +154,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Harpoon",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f7c44e82-9750-4bce-b4eb-111e74eb8ab9",
+                    "path": "<Keyboard>/g",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Arm",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

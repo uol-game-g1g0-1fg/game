@@ -45,22 +45,30 @@ public class PlayerMotor : MonoBehaviour {
     [SerializeField] GameObject model;
     [SerializeField] float collisionForce = 250f;
     
-    [Header("Tools")]
-    [SerializeField] GameObject harpoon;
-    [SerializeField] GameObject harpoonSpawnPoint;
+    [Header("Harpoon")]
+    [SerializeField, Tooltip("Harpoon projectile prefab.")] GameObject harpoon;
+    [SerializeField, Tooltip("Location to spawn harpoon projectiles.")] GameObject harpoonSpawnPoint;
+    [SerializeField, Tooltip("Harpoon that is attached to the submarine model.")] GameObject fixedHarpoon;
     [SerializeField] float harpoonForce = 8000f;
-    [SerializeField] float fireRate = 0.1f;
+    [SerializeField, Range(0.1f, 1f)] float fireRate = 0.1f;
     [SerializeField] GameEvent OnFire;
     float nextFire = 0.0f;
 
+    [Header("Mechanical Arm")] 
+    [SerializeField] GameObject arm;
+    [SerializeField] float armSpeed = 0.3f;
+    Vector3 armFullyExtendedPosition;
+    [SerializeField] ArmState armState = ArmState.RESET;
+    
     [Header("Events")] 
     [SerializeField] GameEvent OnCollision;
+    [SerializeField] GameEvent OnEnableCore;
 
     [Header("Player Stats")] 
     [SerializeField] float score = 0f;
     [SerializeField] float health = 10f;
-    // FIXME after adding the Core pickup mechanic, this should be changed to init as false
-    [SerializeField] bool hasCore = true;
+    [SerializeField] bool enableCore = false;
+    bool hasCore = false;
 
     Camera mainCamera;
 
@@ -68,6 +76,12 @@ public class PlayerMotor : MonoBehaviour {
 
     Rigidbody rb;
     PlayerControls playerControls;
+
+    enum ArmState {
+        RESET,
+        EXTEND,
+        RETRACT
+    }
 
     void Awake() {
         rb = GetComponent<Rigidbody>();
@@ -81,6 +95,9 @@ public class PlayerMotor : MonoBehaviour {
         playerControls.Submarine.Ballast.performed += HandleBallast;
         playerControls.Submarine.Ballast.canceled += HandleBallast;
         playerControls.Submarine.Harpoon.performed += FireHarpoon;
+        playerControls.Submarine.Arm.performed += FireArm;
+        
+        armFullyExtendedPosition = new Vector3(0.85f, 0, 0);
 
     }
 
@@ -105,6 +122,35 @@ public class PlayerMotor : MonoBehaviour {
             if (useMouseForBallast) {
                 ballast = (worldPos.y > model.transform.position.y) ? -1 : 1;
             }
+        }
+
+        // Harpoon updates
+        if (nextFire <= Time.time) {
+            // Show the mounted harpoon, it is now ready to fire again
+            fixedHarpoon.SetActive(true);
+        }
+
+        // Mechanical arm handle pickups
+        if (armState == ArmState.RESET) {
+            // Do something with the items retrieved
+            // Rework this system as the pickup types are expanded
+            if (hasCore) {
+                EnableCore();
+            }
+        }
+        
+        // Mechanical arm move updates
+        if (armState == ArmState.EXTEND && Vector3.Distance(arm.transform.position, model.transform.position) > 0.7f) {
+            armState = ArmState.RETRACT;
+            RetractArm();
+        } else if (armState == ArmState.RETRACT && Vector3.Distance(arm.transform.position, model.transform.position) < 0.1f) {
+
+            armState = ArmState.RESET;
+            arm.transform.position = model.transform.position;
+        } else if (armState == ArmState.RETRACT) {
+            RetractArm();
+        }else if (armState == ArmState.EXTEND) {
+            ExtendArm();
         }
     }
 
@@ -132,8 +178,13 @@ public class PlayerMotor : MonoBehaviour {
         }
     }
 
-    public void EnableCore() {
+    void HasCore() {
         hasCore = true;
+    }
+    
+    void EnableCore() {
+        OnEnableCore?.Invoke();
+        enableCore = true;
     }
 
     void HandleMovement(Vector2 inputVector) {
@@ -153,7 +204,7 @@ public class PlayerMotor : MonoBehaviour {
             rb.AddForce(-transform.right * direction * moveSpeed);
         }
 
-        if (!hasCore) return;
+        if (!enableCore) return;
 
         rb.AddForce(-ballast * transform.up * floatSpeed);
     }
@@ -284,7 +335,7 @@ public class PlayerMotor : MonoBehaviour {
     }
 
     void HandleBoost(InputAction.CallbackContext ctx) {
-         if (!hasCore) return;
+         if (!enableCore) return;
         
          if (ctx.performed && boostCooldown == false) {
              // Boost is ready and player pressed the button
@@ -318,14 +369,29 @@ public class PlayerMotor : MonoBehaviour {
     void FireHarpoon(InputAction.CallbackContext ctx) {
         if (nextFire <= Time.time) {
             nextFire = Time.time + fireRate;
+            
+            // Hide the mounted harpoon
+            fixedHarpoon.SetActive(false);
             // Instantiate the projectile at the position and rotation of this transform
             var clone = Instantiate(harpoon, harpoonSpawnPoint.transform.position, transform.rotation);
-            // Give the cloned object an initial velocity along the current 
-            // object's Z axis
+            // Give the cloned object an initial velocity along the current object's Z axis
             clone.transform.Rotate(-15, 0, 0);
             clone.GetComponent<Rigidbody>().AddForce(model.transform.forward * harpoonForce);
             OnFire?.Invoke();
         }
+    }
+    
+    void FireArm(InputAction.CallbackContext obj) {
+        if (armState != ArmState.RESET) return;
+        armState = ArmState.EXTEND;
+    }
+
+    void ExtendArm() {
+        arm.transform.position += model.transform.forward * Time.deltaTime * armSpeed;
+    }
+
+    void RetractArm() {
+        arm.transform.position += -model.transform.forward * Time.deltaTime * armSpeed;
     }
     
     float ConstrainAngle(float angle) {

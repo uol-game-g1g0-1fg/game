@@ -24,12 +24,56 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1170643483290107011}
   m_LocalRotation: {x: -0.09229599, y: -0.7010574, z: -0.09229599, w: 0.7010574}
-  m_LocalPosition: {x: -0.46, y: 0.83, z: 0}
+  m_LocalPosition: {x: 0.15, y: 0.8, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 418684251069874949}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: -15, y: -90, z: 0}
+--- !u!1 &2350648446264818715
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6060235649392199993}
+  - component: {fileID: 5529131721652225025}
+  m_Layer: 0
+  m_Name: GrabPoint
+  m_TagString: MechArm
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6060235649392199993
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2350648446264818715}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -130, y: -86, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7930265126725712673}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &5529131721652225025
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2350648446264818715}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 20
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2875151144201038376
 GameObject:
   m_ObjectHideFlags: 0
@@ -100,13 +144,18 @@ MonoBehaviour:
   collisionForce: 250
   harpoon: {fileID: 6346821193016433353, guid: c7fb352bc9abbc14cb05aaedb5c7abe7, type: 3}
   harpoonSpawnPoint: {fileID: 1170643483290107011}
+  fixedHarpoon: {fileID: 2228199839167466603}
   harpoonForce: 1500
-  fireRate: 0.4
+  fireRate: 0.5
   OnFire: {fileID: 11400000, guid: 37b6f0cd5e66b894ba405552c27bdb1d, type: 2}
+  arm: {fileID: 7297562789321056667}
+  armSpeed: 0.5
+  armState: 0
   OnCollision: {fileID: 11400000, guid: 0d801ab9e364c6942874acd12f5ab31d, type: 2}
+  OnEnableCore: {fileID: 11400000, guid: 11ee416b49b7cb04c93b6fb25cd267e7, type: 2}
   score: 0
   health: 100
-  hasCore: 0
+  enableCore: 0
 --- !u!114 &4412228153630045529
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -167,7 +216,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2875151144201038390}
-        m_MethodName: EnableCore
+        m_MethodName: HasCore
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -824,6 +873,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fe651a17afbb95048a3dff00ee0e4beb, type: 3}
+--- !u!1 &2228199839167466603 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: fe651a17afbb95048a3dff00ee0e4beb,
+    type: 3}
+  m_PrefabInstance: {fileID: 1309788980377940282}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1560487779620132561 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: fe651a17afbb95048a3dff00ee0e4beb,
@@ -901,6 +956,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SubmarineLightBeam
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 23d1d33644ca8bf4f8b15ae5ea18ba78,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 23d1d33644ca8bf4f8b15ae5ea18ba78, type: 3}
@@ -1139,6 +1199,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7480bb37956dfd5498bd9ef3ac7c982e, type: 3}
+--- !u!1 &7297562789321056667 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 7480bb37956dfd5498bd9ef3ac7c982e,
+    type: 3}
+  m_PrefabInstance: {fileID: 7604133772587048138}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7930265126725712673 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 7480bb37956dfd5498bd9ef3ac7c982e,

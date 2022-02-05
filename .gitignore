@@ -26,6 +26,12 @@
 # Visual Studio cache directory
 .vs/
 
+# User-specific Jetbrains Rider
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
 
 # Gradle cache directory
 .gradle/
