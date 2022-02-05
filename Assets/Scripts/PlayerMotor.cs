@@ -63,6 +63,8 @@ public class PlayerMotor : MonoBehaviour {
     [Header("Events")] 
     [SerializeField] GameEvent OnCollision;
     [SerializeField] GameEvent OnEnableCore;
+    [SerializeField] GameEvent OnExtendArm;
+    [SerializeField] GameEvent OnRetractArm;
 
     [Header("Player Stats")] 
     [SerializeField] float score = 0f;
@@ -134,7 +136,7 @@ public class PlayerMotor : MonoBehaviour {
         if (armState == ArmState.RESET) {
             // Do something with the items retrieved
             // Rework this system as the pickup types are expanded
-            if (hasCore) {
+            if (hasCore && !enableCore) {
                 EnableCore();
             }
         }
@@ -142,9 +144,9 @@ public class PlayerMotor : MonoBehaviour {
         // Mechanical arm move updates
         if (armState == ArmState.EXTEND && Vector3.Distance(arm.transform.position, model.transform.position) > 0.7f) {
             armState = ArmState.RETRACT;
+            OnRetractArm?.Invoke();
             RetractArm();
         } else if (armState == ArmState.RETRACT && Vector3.Distance(arm.transform.position, model.transform.position) < 0.1f) {
-
             armState = ArmState.RESET;
             arm.transform.position = model.transform.position;
         } else if (armState == ArmState.RETRACT) {
@@ -183,6 +185,7 @@ public class PlayerMotor : MonoBehaviour {
     }
     
     void EnableCore() {
+        Debug.Log("Enabled Core");
         OnEnableCore?.Invoke();
         enableCore = true;
     }
@@ -384,6 +387,7 @@ public class PlayerMotor : MonoBehaviour {
     void FireArm(InputAction.CallbackContext obj) {
         if (armState != ArmState.RESET) return;
         armState = ArmState.EXTEND;
+        OnExtendArm?.Invoke();
     }
 
     void ExtendArm() {
