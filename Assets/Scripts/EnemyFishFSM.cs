@@ -155,18 +155,22 @@ namespace EnemyBehaviour
 
         private void OnTriggerEnter(Collider other)
         {
-            Debug.Log(other.name);
-            if (patrolPointIndex < patrolPoints.Length)
-                patrolPointIndex += 1;
-            else
-                patrolPointIndex = 0;
+            if(other.tag == "PatrolPoint")
+            {
+                Debug.Log(other.name);
+                if (patrolPointIndex < patrolPoints.Length)
+                    patrolPointIndex += 1;
+                else
+                    patrolPointIndex = 0;
 
-            currentPoint = patrolPoints[patrolPointIndex];
-            pathPosition = 0.0f;
+                currentPoint = patrolPoints[patrolPointIndex];
+                pathPosition = 0.0f;
 
-            // add turn animation ?
-            currentRotation = 0.0f;
-            turn = true;
+                // add turn animation ?
+                currentRotation = 0.0f;
+                turn = true;
+            }
+           
         }
 
         private void SlowTurn()
