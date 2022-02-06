@@ -13,6 +13,7 @@ TagManager:
   - ProjectileSpawnPoint
   - Ground
   - MechArm
+  - Pullable
   layers:
   - Default
   - TransparentFX
