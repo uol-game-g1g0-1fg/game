@@ -57,6 +57,9 @@ namespace EnemyBehaviour
         [SerializeField] private float m_EnemyPlantProjectileSpeed;
         [SerializeField] private float m_EnemyPlantLOSRadius;
         [SerializeField] private float m_TimeBetweenAttacks;
+
+        [Header("Events")]
+        [SerializeField] GameEvent OnFire;
         #endregion
 
         #region Variables
@@ -224,6 +227,7 @@ namespace EnemyBehaviour
                 {
                     m_PlantProjectile.transform.LookAt(m_TargetEntity.transform.position);
                     rbProjectile.AddForce(m_PlantProjectile.transform.forward * m_EnemyPlantProjectileSpeed);
+                    OnFire?.Invoke();
                 }
             }
         }

@@ -68,7 +68,6 @@ public class PlayerMotor : MonoBehaviour {
 
     [Header("Player Stats")] 
     [SerializeField] float score = 0f;
-    [SerializeField] float health = 10f;
     [SerializeField] bool enableCore = false;
     bool hasCore = false;
 

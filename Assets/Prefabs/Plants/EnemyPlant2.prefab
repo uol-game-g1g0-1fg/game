@@ -444,8 +444,9 @@ MonoBehaviour:
   m_EnemyPlantProjectile: {fileID: 849066391972718375, guid: feeb0ae4db0bc3146b9e667e2d5948dd,
     type: 3}
   m_EnemyPlantProjectileSpeed: 100
-  m_EnemyPlantLOSRadius: 4.5
-  m_TimeBetweenAttacks: 2
+  m_EnemyPlantLOSRadius: 5
+  m_TimeBetweenAttacks: 2.5
+  OnFire: {fileID: 11400000, guid: 03428950c71d3f34db2c9a9206653835, type: 2}
   m_EnemyPlantAnimator: {fileID: 8071400073452959210}
 --- !u!65 &7270242253910021945
 BoxCollider:

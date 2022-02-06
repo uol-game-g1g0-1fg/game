@@ -158,7 +158,7 @@ namespace EnemyBehaviour
             if(other.tag == "PatrolPoint")
             {
                 Debug.Log(other.name);
-                if (patrolPointIndex < patrolPoints.Length)
+                if (patrolPointIndex < patrolPoints.Length - 1)
                     patrolPointIndex += 1;
                 else
                     patrolPointIndex = 0;

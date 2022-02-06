@@ -15,6 +15,7 @@ TagManager:
   - MechArm
   - Pullable
   - PatrolPoint
+  - Harpoon
   layers:
   - Default
   - TransparentFX
