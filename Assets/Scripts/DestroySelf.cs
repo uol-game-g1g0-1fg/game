@@ -13,7 +13,7 @@ public class DestroySelf : MonoBehaviour
         {
             if (gameObject.CompareTag("PlantProjectile"))
             {
-                OnPlantDamage?.Invoke();
+                OnPlantDamage.Invoke();
             }
         }
 

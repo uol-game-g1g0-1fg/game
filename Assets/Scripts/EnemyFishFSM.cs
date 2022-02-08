@@ -157,7 +157,7 @@ namespace EnemyBehaviour
         {
             if(other.tag == "PatrolPoint")
             {
-                Debug.Log(other.name);
+                //Debug.Log(other.name);
                 if (patrolPointIndex < patrolPoints.Length - 1)
                     patrolPointIndex += 1;
                 else
@@ -205,7 +205,7 @@ namespace EnemyBehaviour
                 }
 
                 pathPosition += 0.001f * speed * Time.deltaTime;
-                Debug.Log(pathPosition);
+                //Debug.Log(pathPosition);
                 transform.position = Vector3.Lerp(transform.position, currentPoint.transform.position, pathPosition);
                 if (turn)
                     SlowTurn();

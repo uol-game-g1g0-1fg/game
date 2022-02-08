@@ -60,14 +60,18 @@ namespace EnemyBehaviour
 
         [Header("Events")]
         [SerializeField] GameEvent OnFire;
+        [SerializeField] GameEvent OnPlantDeath;
         #endregion
 
         #region Variables
         public MainFSM m_MainFSM = null;
         public Animator m_EnemyPlantAnimator;
-        public enum StateTypes { IDLE = 0, ATTACK, DIE }
+        public enum StateTypes { IDLE = 0, ATTACK, DEAD }
 
         private EnemyPlantState m_State = null;
+        private StateTypes m_StateType;
+        private EnemyPlantHealth m_EnemyPlantHealth;
+
         private float m_MaxLOSDot = 0.2f;
         private float m_TimeSinceLastAttack = 0;
         private Rigidbody rbProjectile;
@@ -117,25 +121,27 @@ namespace EnemyBehaviour
             m_MainFSM = new MainFSM();
             m_MainFSM.AddState((int)StateTypes.IDLE, new EnemyPlantState(m_MainFSM, StateTypes.IDLE, this));
             m_MainFSM.AddState((int)StateTypes.ATTACK, new EnemyPlantState(m_MainFSM, StateTypes.ATTACK, this));
-            m_MainFSM.AddState((int)StateTypes.DIE, new EnemyPlantState(m_MainFSM, StateTypes.DIE, this));
+            m_MainFSM.AddState((int)StateTypes.DEAD, new EnemyPlantState(m_MainFSM, StateTypes.DEAD, this));
 
             Init_IdleState();
             Init_AttackState();
-            Init_DieState();
+            Init_DeadState();
 
             m_ObjectPoolMgr = GameObjectPoolManager.Instance;
             m_ObjectSpawner = GameObjectSpawner.Instance;
 
             // Start in the idle state by default
-            m_MainFSM.SetCurrentState(m_MainFSM.GetState((int)StateTypes.IDLE));
-
+            SetState(StateTypes.IDLE);
+ 
             m_TargetEntity = GameObject.FindGameObjectWithTag("Player");
+            m_EnemyPlantHealth = m_EnemyPlantGameObject.GetComponent<EnemyPlantHealth>();
         }
 
         private void Update()
         {
             m_MainFSM.Update();
         }
+
         private void FixedUpdate()
         {
             m_MainFSM.FixedUpdate();
@@ -143,6 +149,11 @@ namespace EnemyBehaviour
             m_TimeSinceLastAttack += Time.deltaTime;
             m_CurrentClipInfo = m_EnemyPlantAnimator.GetCurrentAnimatorClipInfo(0);
             m_ClipName = m_CurrentClipInfo[0].clip.name;
+
+            if (m_EnemyPlantHealth.GetHealth() <= 0.0f && m_StateType != StateTypes.DEAD)
+            {
+                SetState(StateTypes.DEAD);
+            }
         }
 
         private void Init_IdleState()
@@ -151,7 +162,7 @@ namespace EnemyBehaviour
 
             m_State.OnEnterDelegate += delegate ()
             {
-                // TODO: Potentially Implement idle OnEnter logic here
+                m_StateType = StateTypes.IDLE;
             };
 
             m_State.OnUpdateDelegate += delegate ()
@@ -162,10 +173,7 @@ namespace EnemyBehaviour
                 }
             };
 
-            m_State.OnExitDelegate += delegate ()
-            {
-                // TODO: Potentially Implement idle OnExit logic here
-            };
+            m_State.OnExitDelegate += delegate () {};
         }
 
         private void Init_AttackState()
@@ -174,6 +182,7 @@ namespace EnemyBehaviour
 
             m_State.OnEnterDelegate += delegate ()
             {
+                m_StateType = StateTypes.ATTACK;
                 m_EnemyPlantAnimator.SetTrigger("RangeAttack");
             };
 
@@ -182,54 +191,45 @@ namespace EnemyBehaviour
                 SetState(StateTypes.IDLE);
             };
 
-            m_State.OnUpdateDelegate += delegate()
-            {
-            };
+            m_State.OnUpdateDelegate += delegate () {};
 
             m_State.OnExitDelegate += delegate ()
             {
                 m_TimeSinceLastAttack = 0;
             };
         }
-        private void Init_DieState()
+
+        private void Init_DeadState()
         {
-            m_State = GetState(StateTypes.DIE);
+            m_State = GetState(StateTypes.DEAD);
 
             m_State.OnEnterDelegate += delegate ()
             {
-                m_EnemyPlantAnimator.SetTrigger("Die");
+                m_StateType = StateTypes.DEAD;
+                m_EnemyPlantAnimator.SetTrigger("Death");
+                OnPlantDeath.Invoke();
             };
 
-            m_State.OnExitDelegate += delegate ()
-            {
-                // TODO: Potentially Implement die OnExit logic here
-                //Debug.Log("OnExit - DIE");
-            };
+            m_State.OnUpdateDelegate += delegate () {};
 
-            m_State.OnUpdateDelegate += delegate ()
-            {
-                // TODO: Potentially Implement die OnUpdate logic here
-                //Debug.Log("OnUpdate - DIE");
-            };
+            m_State.OnExitDelegate += delegate () {};
         }
 
         // Called when the animation hits the event tag.
         private void FireProjectile()
         {
-            if (m_ClipName.Equals("RangeAttack"))
-            {
-                const string tag = "ProjectileSpawnPoint";
-                Vector3 projectilePos = m_ObjectSpawner.FindTransformObjectWithTag(tag, m_EnemyPlantGameObject.transform).position;
-                m_PlantProjectile = m_ObjectPoolMgr.SpawnFromPool("PlantProjectile", projectilePos, Quaternion.identity);
-                rbProjectile = m_PlantProjectile.GetComponent<Rigidbody>();
+            if (!m_ClipName.Equals("RangeAttack")) { return; }
 
-                if (m_PlantProjectile)
-                {
-                    m_PlantProjectile.transform.LookAt(m_TargetEntity.transform.position);
-                    rbProjectile.AddForce(m_PlantProjectile.transform.forward * m_EnemyPlantProjectileSpeed);
-                    OnFire?.Invoke();
-                }
-            }
+            const string tag = "ProjectileSpawnPoint";
+            Vector3 projectilePos = m_ObjectSpawner.FindTransformObjectWithTag(tag, m_EnemyPlantGameObject.transform).position;
+            m_PlantProjectile = m_ObjectPoolMgr.SpawnFromPool("PlantProjectile", projectilePos, Quaternion.identity);
+
+            if (!m_PlantProjectile) { return; }
+
+            rbProjectile = m_PlantProjectile.GetComponent<Rigidbody>();
+            m_PlantProjectile.transform.LookAt(m_TargetEntity.transform.position);
+            rbProjectile.AddForce(m_PlantProjectile.transform.forward * m_EnemyPlantProjectileSpeed);
+            OnFire.Invoke();
         }
     }
 }

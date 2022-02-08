@@ -5,14 +5,28 @@ using UnityEngine;
 
 public class Harpoon : MonoBehaviour {
 
+    #region Property Inspector Variables
+    [Header("Events")]
     [SerializeField] GameEvent OnHit;
 
-    void Update() {
-        Debug.Log(GetComponent<Rigidbody>().velocity);
+    [Header("Damage Points")]
+    [SerializeField] float damageToEnemyPlant;
+    #endregion
+
+    private void Update()
+    {
+        //Debug.Log(GetComponent<Rigidbody>().velocity);
     }
-    void OnCollisionEnter(Collision other) {
+
+    private void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.CompareTag("EnemyPlant"))
+        {
+            other.gameObject.GetComponent<EnemyPlantHealth>().TakeDamage(damageToEnemyPlant);
+        }
+
         Debug.Log("Harpoon hit: " + other.gameObject.name);
-        OnHit?.Invoke();
+        OnHit.Invoke();
         gameObject.SetActive(false);
     }
 }

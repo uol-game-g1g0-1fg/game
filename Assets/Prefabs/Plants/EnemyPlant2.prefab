@@ -383,8 +383,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7642012252694998633}
   - component: {fileID: 8071400073452959210}
-  - component: {fileID: 2223485886377181993}
   - component: {fileID: 7270242253910021945}
+  - component: {fileID: 2223485886377181993}
+  - component: {fileID: -445423595811147345}
   m_Layer: 10
   m_Name: EnemyPlant2
   m_TagString: EnemyPlant
@@ -428,6 +429,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!65 &7270242253910021945
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7642012253216153813}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 3.5177925, z: 1}
+  m_Center: {x: 0, y: 1.258896, z: 0}
 --- !u!114 &2223485886377181993
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -447,20 +461,21 @@ MonoBehaviour:
   m_EnemyPlantLOSRadius: 5
   m_TimeBetweenAttacks: 2.5
   OnFire: {fileID: 11400000, guid: 03428950c71d3f34db2c9a9206653835, type: 2}
+  OnPlantDeath: {fileID: 11400000, guid: 9e4fb25cb801c6b45b634dd013dbb473, type: 2}
   m_EnemyPlantAnimator: {fileID: 8071400073452959210}
---- !u!65 &7270242253910021945
-BoxCollider:
+--- !u!114 &-445423595811147345
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7642012253216153813}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 3.5177925, z: 1}
-  m_Center: {x: 0, y: 1.258896, z: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbc74664b2840c84e987261a571709ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Health: 100
 --- !u!1 &7642012253225114942
 GameObject:
   m_ObjectHideFlags: 0

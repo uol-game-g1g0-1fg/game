@@ -29,7 +29,7 @@ public class PlayerHealth : MonoBehaviour
     {
         m_Health -= damage;
         int gaugeCrackImgIndex = MapToArrayRange(m_Health, m_GaugeCracks.Length);
-        Debug.Log("Previous Img Index: " + m_GaugeCrackImgIndex + ", Current Img Index: " + gaugeCrackImgIndex);
+        //Debug.Log("Previous Img Index: " + m_GaugeCrackImgIndex + ", Current Img Index: " + gaugeCrackImgIndex);
 
         if (m_GaugeCrackImgIndex != gaugeCrackImgIndex)
         {
