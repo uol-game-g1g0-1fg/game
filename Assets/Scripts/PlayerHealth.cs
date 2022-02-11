@@ -14,7 +14,7 @@ public class PlayerHealth : MonoBehaviour
     #region Property Inspector Variables
     [Header("Player Health")]
     [SerializeField] float m_Health = 100.0f;
-    [SerializeField] RawImage[] m_GaugeCracks;
+    [SerializeField] Image[] m_GaugeCracks;
 
     [Header("Events")]
     [SerializeField] GameEvent OnGaugeCrack;
