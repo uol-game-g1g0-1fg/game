@@ -18,11 +18,12 @@ public class PlayerHealth : MonoBehaviour
 
     [Header("Events")]
     [SerializeField] GameEvent OnGaugeCrack;
+    [SerializeField] GameEvent OnPlayerDeath;
     #endregion
 
     private void Start()
     {
-        ResetHealth();
+        ResetGauge();
     }
 
     public void TakeDamage(float damage)
@@ -33,11 +34,13 @@ public class PlayerHealth : MonoBehaviour
 
         if (m_Health <= 0.0f)
         {
-            // TODO: Add the player death event
+            // Disable the ability to control the submarine
+            gameObject.GetComponent<PlayerMotor>().enabled = false;
+            OnPlayerDeath.Invoke();
         }
     }
 
-    private void ResetHealth()
+    private void ResetGauge()
     {
         if (m_Health.Equals(100.0f))
         {
@@ -50,8 +53,11 @@ public class PlayerHealth : MonoBehaviour
 
     private void UpdateGauge()
     {
+        if (m_GaugeCracks.Length < 1)
+            return;
+
         int gaugeCrackImgIndex = MapToArrayRange(m_Health, m_GaugeCracks.Length);
-        if (gaugeCrackImgIndex < 0 || m_GaugeCracks.Length < 1)
+        if (gaugeCrackImgIndex < 0)
             return;
 
         if (m_GaugeCrackImgIndex == gaugeCrackImgIndex)
@@ -68,5 +74,10 @@ public class PlayerHealth : MonoBehaviour
         const float maxHealth = 100.0f;
         float result = minHealth + ((float)numImages - minHealth) * ((healthValue - maxHealth) / (minHealth - maxHealth));
         return Mathf.Clamp(Mathf.FloorToInt(result), 0, numImages - 1);
+    }
+
+    public bool IsDead()
+    {
+        return m_Health <= 0.0f;
     }
 }

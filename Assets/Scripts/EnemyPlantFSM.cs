@@ -76,7 +76,8 @@ namespace EnemyBehaviour
         private float m_TimeSinceLastAttack = 0;
         private Rigidbody rbProjectile;
 
-        private GameObject m_TargetEntity;
+        private GameObject m_Player;
+        private PlayerHealth m_PlayerHealth;
         private GameObject m_PlantProjectile;
 
         private string m_ClipName;
@@ -96,9 +97,19 @@ namespace EnemyBehaviour
             return (EnemyPlantState)m_MainFSM.GetState((int)type);
         }
 
+        private bool ShouldAttack()
+        {
+            if (m_PlayerHealth.IsDead())
+            {
+                return false;
+            }
+
+            return (IsWithinRange() && m_TimeSinceLastAttack > m_TimeBetweenAttacks);
+        }
+
         private bool IsWithinRange()
         {
-            float dist = Vector3.Distance(m_TargetEntity.transform.position,m_EnemyPlantGameObject.transform.position);
+            float dist = Vector3.Distance(m_Player.transform.position,m_EnemyPlantGameObject.transform.position);
             if (dist < m_EnemyPlantLOSRadius && GetAngleToTarget() <= m_MaxLOSDot)
             {
                 return true;
@@ -109,8 +120,8 @@ namespace EnemyBehaviour
 
         private float GetAngleToTarget()
         {
-            Vector3 up = m_TargetEntity.transform.TransformDirection(Vector3.up);
-            Vector3 toEnemy = (m_EnemyPlantGameObject.transform.position - m_TargetEntity.transform.position).normalized;
+            Vector3 up = m_Player.transform.TransformDirection(Vector3.up);
+            Vector3 toEnemy = (m_EnemyPlantGameObject.transform.position - m_Player.transform.position).normalized;
             return Vector3.Dot(up, toEnemy);
         }
 
@@ -133,7 +144,8 @@ namespace EnemyBehaviour
             // Start in the idle state by default
             SetState(StateTypes.IDLE);
  
-            m_TargetEntity = GameObject.FindGameObjectWithTag("Player");
+            m_Player = GameObject.FindGameObjectWithTag("Player");
+            m_PlayerHealth = m_Player.GetComponent<PlayerHealth>();
             m_EnemyPlantHealth = m_EnemyPlantGameObject.GetComponent<EnemyPlantHealth>();
         }
 
@@ -167,7 +179,7 @@ namespace EnemyBehaviour
 
             m_State.OnUpdateDelegate += delegate ()
             {
-                if (IsWithinRange() && m_TimeSinceLastAttack > m_TimeBetweenAttacks)
+                if (ShouldAttack())
                 {
                     SetState(StateTypes.ATTACK);
                 }
@@ -227,7 +239,7 @@ namespace EnemyBehaviour
             if (!m_PlantProjectile) { return; }
 
             rbProjectile = m_PlantProjectile.GetComponent<Rigidbody>();
-            m_PlantProjectile.transform.LookAt(m_TargetEntity.transform.position);
+            m_PlantProjectile.transform.LookAt(m_Player.transform.position);
             rbProjectile.AddForce(m_PlantProjectile.transform.forward * m_EnemyPlantProjectileSpeed);
             OnFire.Invoke();
         }
