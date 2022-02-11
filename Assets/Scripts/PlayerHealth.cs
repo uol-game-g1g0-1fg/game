@@ -28,15 +28,8 @@ public class PlayerHealth : MonoBehaviour
     public void TakeDamage(float damage)
     {
         m_Health -= damage;
-        int gaugeCrackImgIndex = MapToArrayRange(m_Health, m_GaugeCracks.Length);
-        //Debug.Log("Previous Img Index: " + m_GaugeCrackImgIndex + ", Current Img Index: " + gaugeCrackImgIndex);
 
-        if (m_GaugeCrackImgIndex != gaugeCrackImgIndex)
-        {
-            m_GaugeCrackImgIndex = gaugeCrackImgIndex;
-            m_GaugeCracks[m_GaugeCrackImgIndex].enabled = true;
-            OnGaugeCrack.Invoke();
-        }
+        UpdateGauge();
 
         if (m_Health <= 0.0f)
         {
@@ -53,6 +46,20 @@ public class PlayerHealth : MonoBehaviour
                 gaugeCrack.enabled = false;
             }
         }
+    }
+
+    private void UpdateGauge()
+    {
+        int gaugeCrackImgIndex = MapToArrayRange(m_Health, m_GaugeCracks.Length);
+        if (gaugeCrackImgIndex < 0 || m_GaugeCracks.Length < 1)
+            return;
+
+        if (m_GaugeCrackImgIndex == gaugeCrackImgIndex)
+            return;
+
+        m_GaugeCrackImgIndex = gaugeCrackImgIndex;
+        m_GaugeCracks[m_GaugeCrackImgIndex].enabled = true;
+        OnGaugeCrack.Invoke();
     }
 
     private static int MapToArrayRange(float healthValue, int numImages)
