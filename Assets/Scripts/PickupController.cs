@@ -4,9 +4,16 @@ public class PickupController : MonoBehaviour {
     float pickupRadius;
     bool enableAnimation;
     GameObject arm;
+    GameObject player;
+    PlayerMotor playerMotor;
     
     [SerializeField] GameEvent OnPickup;
     [SerializeField] float journeyTime = 1.0f;
+
+    void Awake() {
+        player = GameObject.FindWithTag("Player");
+        playerMotor = player.GetComponent<PlayerMotor>();
+    }
     
     void Update() {
         if (!enableAnimation) return;
@@ -22,7 +29,7 @@ public class PickupController : MonoBehaviour {
 
     void OnTriggerEnter(Collider collider) {
         // Debug.Log("Pickup collided with " + collider.gameObject.name);
-        if (collider.gameObject.tag == "MechArm") {
+        if (collider.gameObject.tag == "MechArm" && playerMotor.IsArmExtended()) {
             enableAnimation = true;
             arm = collider.gameObject;
         }
