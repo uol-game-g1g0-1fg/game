@@ -29,7 +29,8 @@ public class PickupController : MonoBehaviour {
 
     void OnTriggerEnter(Collider collider) {
         // Debug.Log("Pickup collided with " + collider.gameObject.name);
-        if (collider.gameObject.tag == "MechArm" && playerMotor.IsArmExtended()) {
+        Debug.Log(playerMotor.IsArmExtended());
+        if (collider.gameObject.CompareTag("MechArm") && playerMotor.IsArmExtended()) {
             enableAnimation = true;
             arm = collider.gameObject;
         }

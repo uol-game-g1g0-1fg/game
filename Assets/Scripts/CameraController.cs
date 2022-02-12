@@ -1,4 +1,5 @@
-﻿using Cinemachine;
+﻿using System;
+using Cinemachine;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour {
@@ -12,24 +13,38 @@ public class CameraController : MonoBehaviour {
         mainCamera = Camera.main;
         numCollidersInModel = gameObject.GetComponentsInChildren<Collider>().Length;
     }
+    
+    void OnTriggerEnter(Collider other) {
+        if (other.gameObject.CompareTag("CameraZone")) {
+            var distance = other.GetComponent<CameraZone>().distance;
+            var zoomModifier = 1;
+            
+            switch(distance)  {
+                case CameraZone.CameraDistance.Near:
+                    Debug.Log("ZOOM 1");
+                    zoomModifier = 1;
+                    break;
+                case CameraZone.CameraDistance.Mid:
+                    Debug.Log("ZOOM 2");
+                    zoomModifier = 2;
+                    break;
+                case CameraZone.CameraDistance.Far:
+                    Debug.Log("ZOOM 3");
+                    zoomModifier = 3;
+                    break;
+                default:
+                    Debug.Log("NO ZOOM");
+                    break;
+            }
 
-    void Update() {
-        HandleCameraSphereCollider();
+            SetVirtualCamera(zoomModifier);
+        }
     }
 
-    void HandleCameraSphereCollider() {
-        int zoomModifier = 1 - numCollidersInModel;
-        Collider[] hitColliders = new Collider[virtualCameras.Length + numCollidersInModel];
-        
-        int numColliders = Physics.OverlapSphereNonAlloc(transform.position, cameraSphereCastRadius, hitColliders);
-
-        for (int i = 0; i < numColliders - numCollidersInModel; i++) {
-            zoomModifier++;
-        }
-        //Debug.Log("Camera Zoom: " + zoomModifier);
-
-        for (int i = 0; i < virtualCameras.Length - 1; i++) {
-            virtualCameras[i].SetActive(i == zoomModifier);
+    void SetVirtualCamera(int zoom) {
+        for (int i = 0; i < virtualCameras.Length; i++) {
+            Debug.Log("Setting camera element " + (zoom - 1));
+            virtualCameras[i].SetActive(i == (zoom - 1));
         }
     }
 
