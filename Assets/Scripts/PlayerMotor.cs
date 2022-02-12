@@ -148,9 +148,13 @@ public class PlayerMotor : MonoBehaviour {
             arm.transform.position = model.transform.position;
         } else if (armState == ArmState.RETRACT) {
             RetractArm();
-        }else if (armState == ArmState.EXTEND) {
+        } else if (armState == ArmState.EXTEND) {
             ExtendArm();
         }
+    }
+
+    public bool IsArmExtended() {
+        return armState == ArmState.EXTEND;
     }
 
     void FixedUpdate() {
