@@ -16,6 +16,7 @@ TagManager:
   - Pullable
   - PatrolPoint
   - Harpoon
+  - CameraZone
   layers:
   - Default
   - TransparentFX

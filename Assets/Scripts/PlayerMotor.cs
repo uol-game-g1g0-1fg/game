@@ -153,10 +153,6 @@ public class PlayerMotor : MonoBehaviour {
         }
     }
 
-    public bool IsArmExtended() {
-        return armState == ArmState.EXTEND;
-    }
-
     void FixedUpdate() {
         if (playerHealth.IsDead()) return;
         
@@ -181,6 +177,10 @@ public class PlayerMotor : MonoBehaviour {
             
             OnCollision?.Invoke();
         }
+    }
+
+    public bool IsArmExtended() {
+        return armState == ArmState.EXTEND;
     }
 
     void HasCore() {
@@ -219,8 +219,8 @@ public class PlayerMotor : MonoBehaviour {
         Vector2 playerVector = inputVector;
 
         if (useControlScheme2) {
-            float inputX = inputVector.x;
-            float inputY = inputVector.y;
+            var inputX = inputVector.x;
+            var inputY = inputVector.y;
             // Remap input vector as per Berta's suggestion
             if (inputX == 0) {
                 // Player is only pressing a key in the Y direction
