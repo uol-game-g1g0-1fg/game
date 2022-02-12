@@ -57,7 +57,7 @@ public class PlayerMotor : MonoBehaviour {
     [Header("Mechanical Arm")] 
     [SerializeField] GameObject arm;
     [SerializeField] float armSpeed = 0.3f;
-    Vector3 armFullyExtendedPosition;
+    Vector3 armFullyExtendedPosition = new Vector3(0.85f, 0, 0);
     [SerializeField] ArmState armState = ArmState.RESET;
     
     [Header("Events")] 
@@ -67,7 +67,6 @@ public class PlayerMotor : MonoBehaviour {
     [SerializeField] GameEvent OnRetractArm;
 
     [Header("Player Stats")] 
-    [SerializeField] float score = 0f;
     [SerializeField] bool enableCore = false;
     bool hasCore = false;
 
@@ -77,6 +76,7 @@ public class PlayerMotor : MonoBehaviour {
 
     Rigidbody rb;
     PlayerControls playerControls;
+    PlayerHealth playerHealth;
 
     enum ArmState {
         RESET,
@@ -88,6 +88,7 @@ public class PlayerMotor : MonoBehaviour {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         playerControls = new PlayerControls();
+        playerHealth = GetComponent<PlayerHealth>();
         mainCamera = Camera.main;
 
         playerControls.Submarine.Enable();
@@ -97,9 +98,6 @@ public class PlayerMotor : MonoBehaviour {
         playerControls.Submarine.Ballast.canceled += HandleBallast;
         playerControls.Submarine.Harpoon.performed += FireHarpoon;
         playerControls.Submarine.Arm.performed += FireArm;
-        
-        armFullyExtendedPosition = new Vector3(0.85f, 0, 0);
-
     }
 
     void Update() {
@@ -156,6 +154,8 @@ public class PlayerMotor : MonoBehaviour {
     }
 
     void FixedUpdate() {
+        if (playerHealth.IsDead()) return;
+        
         Vector2 inputVector = playerControls.Submarine.Movement.ReadValue<Vector2>();
 
         HandleMovement(inputVector);
