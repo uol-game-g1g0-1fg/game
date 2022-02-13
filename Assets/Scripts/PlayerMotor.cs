@@ -184,7 +184,7 @@ public class PlayerMotor : MonoBehaviour {
     }
 
     public bool IsArmExtended() {
-        return armState == ArmState.EXTEND;
+        return armState != ArmState.RESET;
     }
 
     void HasCore() {
