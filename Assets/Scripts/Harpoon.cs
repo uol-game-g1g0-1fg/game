@@ -11,7 +11,11 @@ public class Harpoon : MonoBehaviour {
 
     [Header("Damage Points")]
     [SerializeField] float damageToEnemyPlant;
+    
+    [Header("Particle Effect")]
+    [SerializeField] ParticleSystem impactVFX;
     #endregion
+    
 
     private void Update()
     {
@@ -27,6 +31,10 @@ public class Harpoon : MonoBehaviour {
         }
 
         Debug.Log("Harpoon hit: " + other.gameObject.name);
+        
+        // Instantiate a small particle effect
+        var contact = other.contacts[0];
+        Instantiate(impactVFX, contact.point, Quaternion.Euler(contact.normal));
         OnHit.Invoke();
         gameObject.SetActive(false);
     }
