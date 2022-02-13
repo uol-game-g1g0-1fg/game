@@ -440,8 +440,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 3.5177925, z: 1}
-  m_Center: {x: 0, y: 1.258896, z: 0}
+  m_Size: {x: 1, y: 3.992066, z: 1}
+  m_Center: {x: 0, y: 1.4960326, z: 0}
 --- !u!114 &2223485886377181993
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -458,7 +458,7 @@ MonoBehaviour:
   m_EnemyPlantProjectile: {fileID: 849066391972718375, guid: feeb0ae4db0bc3146b9e667e2d5948dd,
     type: 3}
   m_EnemyPlantProjectileSpeed: 100
-  m_EnemyPlantLOSRadius: 5
+  m_EnemyPlantLOSRadius: 5.5
   m_TimeBetweenAttacks: 2.5
   OnFire: {fileID: 11400000, guid: 03428950c71d3f34db2c9a9206653835, type: 2}
   OnPlantDeath: {fileID: 11400000, guid: 9e4fb25cb801c6b45b634dd013dbb473, type: 2}

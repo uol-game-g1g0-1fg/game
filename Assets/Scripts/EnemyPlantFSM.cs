@@ -175,6 +175,8 @@ namespace EnemyBehaviour
             m_State.OnEnterDelegate += delegate ()
             {
                 m_StateType = StateTypes.IDLE;
+
+                m_EnemyPlantAnimator.SetTrigger("Idle");
             };
 
             m_State.OnUpdateDelegate += delegate ()
@@ -195,12 +197,23 @@ namespace EnemyBehaviour
             m_State.OnEnterDelegate += delegate ()
             {
                 m_StateType = StateTypes.ATTACK;
-                m_EnemyPlantAnimator.SetTrigger("RangeAttack");
+
+                if (m_EnemyPlantAnimator.HasState(0, Animator.StringToHash("RangeAttack")))
+                {
+                    m_EnemyPlantAnimator.SetTrigger("RangeAttack");
+                }
+                else if (m_EnemyPlantAnimator.HasState(0, Animator.StringToHash("Spell")))
+                {
+                    m_EnemyPlantAnimator.SetTrigger("Spell");
+                }
             };
 
             m_State.OnFixedUpdateDelegate += delegate ()
             {
-                SetState(StateTypes.IDLE);
+                if (!ShouldAttack())
+                {
+                    SetState(StateTypes.IDLE);
+                }
             };
 
             m_State.OnUpdateDelegate += delegate () {};

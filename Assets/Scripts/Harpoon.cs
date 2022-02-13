@@ -20,7 +20,8 @@ public class Harpoon : MonoBehaviour {
 
     private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.CompareTag("EnemyPlant"))
+        // TODO BERTA: Find a better way to query for plant variants
+        if (other.gameObject.CompareTag("EnemyPlant") || other.gameObject.CompareTag("EnemyPlant2"))
         {
             other.gameObject.GetComponent<EnemyPlantHealth>().TakeDamage(damageToEnemyPlant);
         }
