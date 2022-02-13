@@ -34,8 +34,6 @@ public class PlayerHealth : MonoBehaviour
 
         if (m_Health <= 0.0f)
         {
-            // Disable the ability to control the submarine
-            gameObject.GetComponent<PlayerMotor>().enabled = false;
             OnPlayerDeath.Invoke();
         }
     }

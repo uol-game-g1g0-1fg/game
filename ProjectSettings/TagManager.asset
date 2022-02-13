@@ -17,6 +17,8 @@ TagManager:
   - PatrolPoint
   - Harpoon
   - CameraZone
+  - EnemyPlant2
+  - WaterSurface
   layers:
   - Default
   - TransparentFX

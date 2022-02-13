@@ -65,6 +65,7 @@ public class PlayerMotor : MonoBehaviour {
     [SerializeField] GameEvent OnEnableCore;
     [SerializeField] GameEvent OnExtendArm;
     [SerializeField] GameEvent OnRetractArm;
+    [SerializeField] GameEvent OnPlayerWin;
 
     [Header("Player Stats")] 
     [SerializeField] bool enableCore = false;
@@ -78,6 +79,8 @@ public class PlayerMotor : MonoBehaviour {
     PlayerControls playerControls;
     PlayerHealth playerHealth;
 
+    private GameObject waterSurface;
+
     enum ArmState {
         RESET,
         EXTEND,
@@ -90,6 +93,7 @@ public class PlayerMotor : MonoBehaviour {
         playerControls = new PlayerControls();
         playerHealth = GetComponent<PlayerHealth>();
         mainCamera = Camera.main;
+        waterSurface = GameObject.FindGameObjectWithTag("WaterSurface");
 
         playerControls.Submarine.Enable();
         playerControls.Submarine.Boost.performed += HandleBoost;
@@ -154,8 +158,8 @@ public class PlayerMotor : MonoBehaviour {
     }
 
     void FixedUpdate() {
-        if (playerHealth.IsDead()) return;
-        
+        if (playerHealth.IsDead() || ReachedSurface()) return;
+
         Vector2 inputVector = playerControls.Submarine.Movement.ReadValue<Vector2>();
 
         HandleMovement(inputVector);
@@ -407,4 +411,19 @@ public class PlayerMotor : MonoBehaviour {
         return (angle > 180) ? angle - 360 : angle;
     }
 
+    private bool ReachedSurface() {
+        Vector3 modelPos = model.transform.position;
+        Vector3 waterSurfacePos = waterSurface.transform.position;
+        float modelHalfBound = model.transform.localScale.y / 2.0f;
+
+        if (modelPos.y > (waterSurfacePos.y + modelHalfBound)) {
+            Vector3 newPosition = new Vector3(modelPos.x, waterSurfacePos.y + modelHalfBound, modelPos.z);
+            transform.position = newPosition;
+            rb.constraints = RigidbodyConstraints.FreezeAll;
+            OnPlayerWin.Invoke();
+            return true;
+        }
+
+        return false;
+    }
 }

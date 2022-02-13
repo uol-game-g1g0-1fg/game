@@ -6,8 +6,9 @@ using UnityEngine.SceneManagement;
 public class MainMenu : MonoBehaviour
 {
     #region Property Inspector Variables
-    [SerializeField] GameObject m_showOnDeath;
-    [SerializeField] GameObject[] m_hideOnDeath;
+    [SerializeField] GameObject m_ShowOnDeath;
+    [SerializeField] GameObject m_ShowOnWin;
+    [SerializeField] GameObject[] m_HideOnFinish;
     #endregion
 
     public void StartGame()
@@ -22,20 +23,28 @@ public class MainMenu : MonoBehaviour
 
     public void ShowOnDeath()
     {
-        if (m_showOnDeath)
+        if (m_ShowOnDeath)
         {
-            m_showOnDeath.SetActive(true);
+            m_ShowOnDeath.SetActive(true);
         }
     }
 
-    public void HideOnDeath()
+    public void HideOnFinish()
     {
-        if (m_hideOnDeath.Length > 0)
+        if (m_HideOnFinish.Length > 0)
         {
-            foreach (GameObject gameObject in m_hideOnDeath)
+            foreach (GameObject gameObject in m_HideOnFinish)
             {
                 gameObject.SetActive(false);
             }
+        }
+    }
+
+    public void ShowOnWin()
+    {
+        if (m_ShowOnWin)
+        {
+            m_ShowOnWin.SetActive(true);
         }
     }
 
