@@ -143,7 +143,7 @@ namespace EnemyBehaviour
 
             // Start in the idle state by default
             SetState(StateTypes.IDLE);
- 
+
             m_Player = GameObject.FindGameObjectWithTag("Player");
             m_PlayerHealth = m_Player.GetComponent<PlayerHealth>();
             m_EnemyPlantHealth = m_EnemyPlantGameObject.GetComponent<EnemyPlantHealth>();
@@ -179,7 +179,7 @@ namespace EnemyBehaviour
                 m_EnemyPlantAnimator.SetTrigger("Idle");
             };
 
-            m_State.OnUpdateDelegate += delegate ()
+            m_State.OnFixedUpdateDelegate += delegate ()
             {
                 if (ShouldAttack())
                 {
@@ -206,6 +206,7 @@ namespace EnemyBehaviour
                 {
                     m_EnemyPlantAnimator.SetTrigger("Spell");
                 }
+                m_TimeSinceLastAttack = 0;
             };
 
             m_State.OnFixedUpdateDelegate += delegate ()
@@ -215,8 +216,6 @@ namespace EnemyBehaviour
                     SetState(StateTypes.IDLE);
                 }
             };
-
-            m_State.OnUpdateDelegate += delegate () {};
 
             m_State.OnExitDelegate += delegate ()
             {

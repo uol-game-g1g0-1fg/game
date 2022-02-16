@@ -15,7 +15,6 @@ public class Harpoon : MonoBehaviour {
     [Header("Particle Effect")]
     [SerializeField] ParticleSystem impactVFX;
     #endregion
-    
 
     private void Update()
     {
@@ -24,8 +23,7 @@ public class Harpoon : MonoBehaviour {
 
     private void OnCollisionEnter(Collision other)
     {
-        // TODO BERTA: Find a better way to query for plant variants
-        if (other.gameObject.CompareTag("EnemyPlant") || other.gameObject.CompareTag("EnemyPlant2"))
+        if (IsEnemyPlant(other.gameObject))
         {
             other.gameObject.GetComponent<EnemyPlantHealth>().TakeDamage(damageToEnemyPlant);
         }
@@ -37,5 +35,20 @@ public class Harpoon : MonoBehaviour {
         Instantiate(impactVFX, contact.point, Quaternion.Euler(contact.normal));
         OnHit.Invoke();
         gameObject.SetActive(false);
+    }
+
+    private static bool IsEnemyPlant(GameObject otherGameObject)
+    {
+        string[] enemyPlantTags = { "EnemyPlant", "EnemyPlant2" };
+
+        for (int i = 0; i < enemyPlantTags.Length; ++i)
+        {
+            if (otherGameObject.CompareTag(enemyPlantTags[i]))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
