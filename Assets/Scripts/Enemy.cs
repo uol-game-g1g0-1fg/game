@@ -1,10 +1,10 @@
-﻿    using UnityEngine;
+﻿using UnityEngine;
 
-    public abstract class Enemy : MonoBehaviour {
-        public enum StateTypes { IDLE, ATTACK, DEAD }
+public abstract class Enemy : MonoBehaviour {
+    public enum StateTypes { IDLE, ATTACK, DEAD }
 
-        public EnemyManager enemyManager;
-        
-        // Must be overridden in all children.  Must return the current state of the enemy FSM.
-        public abstract StateTypes State { get; }
-    }
+    public EnemyManager enemyManager;
+    
+    // Must be overridden in all children.  Must return the current state of the enemy FSM.
+    public abstract StateTypes State { get; }
+}
