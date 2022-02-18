@@ -1,55 +1,76 @@
 ﻿using System;
+using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour {
     [Header("Camera Settings")] 
-    [SerializeField, Range(1, 5)] float cameraSphereCastRadius = 3f;
-    int numCollidersInModel;
-    Camera mainCamera;
     public GameObject[] virtualCameras;
+    readonly CameraZone.CameraDistance baseDistance = CameraZone.CameraDistance.Mid;
     
-    void Awake() {
-        mainCamera = Camera.main;
-        numCollidersInModel = gameObject.GetComponentsInChildren<Collider>().Length;
+    EnemyManager enemyManager;
+    
+    bool canSwitchCamera;
+    
+    void Start() {
+        enemyManager = GameObject.FindGameObjectWithTag("Player").GetComponent<EnemyManager>();
+        HandleCameraZoom(baseDistance);
     }
     
     void OnTriggerEnter(Collider other) {
         if (other.gameObject.CompareTag("CameraZone")) {
-            var distance = other.GetComponent<CameraZone>().distance;
-            var zoomModifier = 1;
-            
-            switch(distance)  {
-                case CameraZone.CameraDistance.Near:
-                    Debug.Log("ZOOM 1");
-                    zoomModifier = 1;
-                    break;
-                case CameraZone.CameraDistance.Mid:
-                    Debug.Log("ZOOM 2");
-                    zoomModifier = 2;
-                    break;
-                case CameraZone.CameraDistance.Far:
-                    Debug.Log("ZOOM 3");
-                    zoomModifier = 3;
-                    break;
-                default:
-                    Debug.Log("NO ZOOM");
-                    break;
-            }
-
-            SetVirtualCamera(zoomModifier);
+            HandleCameraZoom(other.GetComponent<CameraZone>().distance);
         }
+    }
+
+    void OnTriggerExit(Collider other) {
+        HandleCameraZoom(baseDistance);
+    }
+    
+    void Update() {
+        if (enemyManager.AnyEnemyAttacking()) {
+            HandleCameraZoom(CameraZone.CameraDistance.Near);
+            StartCoroutine(nameof(CameraSwitchCooldown));
+            canSwitchCamera = false;
+        } else if (canSwitchCamera) {
+            
+            HandleCameraZoom(baseDistance);
+        }
+    }
+    
+    public IEnumerable<WaitForSeconds> CameraSwitchCooldown(){
+        yield return new WaitForSeconds (5);
+        canSwitchCamera = true;
+    }
+
+    void HandleCameraZoom(CameraZone.CameraDistance distance) {
+        var index = 1;
+            
+        switch(distance)  {
+            case CameraZone.CameraDistance.Near:
+                Debug.Log("ZOOM 1");
+                index = 1;
+                break;
+            case CameraZone.CameraDistance.Mid:
+                Debug.Log("ZOOM 2");
+                index = 2;
+                break;
+            case CameraZone.CameraDistance.Far:
+                Debug.Log("ZOOM 3");
+                index = 3;
+                break;
+            default:
+                Debug.Log("NO ZOOM");
+                break;
+        }
+
+        SetVirtualCamera(index - 1);
     }
 
     void SetVirtualCamera(int zoom) {
         for (int i = 0; i < virtualCameras.Length; i++) {
-            Debug.Log("Setting camera element " + (zoom - 1));
-            virtualCameras[i].SetActive(i == (zoom - 1));
+            Debug.Log("Setting camera element " + (zoom));
+            virtualCameras[i].SetActive(i == (zoom));
         }
-    }
-
-    void OnDrawGizmos() {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, cameraSphereCastRadius);
     }
 }

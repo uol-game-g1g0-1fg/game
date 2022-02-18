@@ -15,11 +15,4 @@ public class CameraZone : MonoBehaviour {
     [SerializeField, Tooltip("Camera Distance for this Zone, set upon entry.")]
     public CameraDistance distance;
 
-    void Start() {
-        
-    }
-
-    void Update() {
-        
-    }
 }
