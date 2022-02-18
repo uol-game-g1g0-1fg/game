@@ -1,0 +1,19 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+
+public class EnemyManager : MonoBehaviour {
+    readonly HashSet<Enemy> enemies = new HashSet<Enemy>();
+    
+    // Allows an enemy to add itself to the enemy manager
+    public void Add(Enemy obj) => enemies.Add(obj);
+    // Allows an enemy to remove itself from the enemy manager
+    public void Remove(Enemy obj) => enemies.Remove(obj);
+
+    // Evaluates if any enemy is attacking the player
+    public bool AnyEnemyAttacking() {
+        return enemies.Any(enemy => enemy.State == Enemy.StateTypes.ATTACK);
+    }
+}

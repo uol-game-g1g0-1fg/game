@@ -48,7 +48,7 @@ namespace EnemyBehaviour
         }
     }
 
-    public class EnemyPlantFSM : MonoBehaviour
+    public class EnemyPlantFSM : Enemy
     {
         #region Property Inspector Variables
         [Header("Enemy Settings")]
@@ -66,7 +66,6 @@ namespace EnemyBehaviour
         #region Variables
         public MainFSM m_MainFSM = null;
         public Animator m_EnemyPlantAnimator;
-        public enum StateTypes { IDLE = 0, ATTACK, DEAD }
 
         private EnemyPlantState m_State = null;
         private StateTypes m_StateType;
@@ -96,6 +95,8 @@ namespace EnemyBehaviour
         {
             return (EnemyPlantState)m_MainFSM.GetState((int)type);
         }
+
+        public override StateTypes State => m_StateType;
 
         private bool ShouldAttack()
         {
@@ -147,6 +148,10 @@ namespace EnemyBehaviour
             m_Player = GameObject.FindGameObjectWithTag("Player");
             m_PlayerHealth = m_Player.GetComponent<PlayerHealth>();
             m_EnemyPlantHealth = m_EnemyPlantGameObject.GetComponent<EnemyPlantHealth>();
+            
+            // Add the plant to the Enemy Manager
+            enemyManager = m_Player.GetComponent<EnemyManager>();
+            enemyManager.Add(this);
         }
 
         private void Update()
@@ -165,6 +170,8 @@ namespace EnemyBehaviour
             if (m_EnemyPlantHealth.GetHealth() <= 0.0f && m_StateType != StateTypes.DEAD)
             {
                 SetState(StateTypes.DEAD);
+                // Remove the plant from the Enemy Manager
+                enemyManager.Remove(this);
             }
         }
 

@@ -1,20 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿    using UnityEngine;
 
-public class Enemy : MonoBehaviour {
+    public abstract class Enemy : MonoBehaviour {
+        public enum StateTypes { IDLE, ATTACK, DEAD }
 
-    [SerializeField] GameEvent onDied;
-    bool dead;
-
-    void OnMouseDown() {
-        if (!dead) 
-          Die();
+        public EnemyManager enemyManager;
+        
+        // Must be overridden in all children.  Must return the current state of the enemy FSM.
+        public abstract StateTypes State { get; }
     }
-
-    void Die() {
-        // GetComponent<Animator>().SetBool("Dead", true);
-        onDied?.Invoke();
-        dead = true;
-    }
-}

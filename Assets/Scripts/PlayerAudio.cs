@@ -8,15 +8,27 @@ public class PlayerAudio : MonoBehaviour {
     public AudioMixerSnapshot idleSnapshot;
     public AudioMixerSnapshot battleSnapshot;
 
-    void OnTriggerEnter(Collider other) {
-        if (other.CompareTag("DangerZone")) {
-            battleSnapshot.TransitionTo(0.5f);
-        }
+    EnemyManager enemyManager;
+    
+    bool canSwitchAudio;
+
+    void Start() {
+        enemyManager = gameObject.GetComponent<EnemyManager>();
+        canSwitchAudio = true;
     }
 
-    void OnTriggerExit(Collider other) {
-        if (other.CompareTag("DangerZone")) {
+    void Update() {
+        if (enemyManager.AnyEnemyAttacking()) {
+            battleSnapshot.TransitionTo(0.01f);
+            StartCoroutine(nameof(AudioSnapshotSwitchCooldown));
+            canSwitchAudio = false;
+        } else if (canSwitchAudio) {
             idleSnapshot.TransitionTo(2f);
         }
+    }
+    
+    public IEnumerator AudioSnapshotSwitchCooldown(){
+        yield return new WaitForSeconds (5);
+        canSwitchAudio = true;
     }
 }

@@ -10,7 +10,7 @@ namespace EnemyBehaviour
     {
         #region Variables
         protected EnemyFishFSM m_EnemyFSM;
-        protected EnemyFishFSM.StateTypes m_StateType;
+        public EnemyFishFSM.StateTypes m_StateType;
         #endregion
 
         public EnemyFishFSM.StateTypes StateType => m_StateType;
@@ -48,7 +48,7 @@ namespace EnemyBehaviour
         }
     }
 
-    public class EnemyFishFSM : MonoBehaviour
+    public class EnemyFishFSM : Enemy
     {
         #region Property Inspector Variables
         [Header("Enemy Settings")]
@@ -61,9 +61,8 @@ namespace EnemyBehaviour
 
         #region Variables
         public MainFSM m_MainFSM = null;
-        public enum StateTypes { IDLE = 0, ATTACK, DIE }
-
         private EnemyFishState m_State = null;
+
         private float m_MaxLOSDot = 0.2f;
         private float m_TimeSinceLastAttack = 0;
         private Rigidbody rbProjectile;
@@ -98,6 +97,10 @@ namespace EnemyBehaviour
             return (EnemyFishState)m_MainFSM.GetState((int)type);
         }
 
+        public override StateTypes State {
+            get => m_State.m_StateType;
+        }
+
         private bool IsWithinRange()
         {
             //float dist = Vector3.Distance(m_TargetEntity.transform.position,m_EnemyPlantGameObject.transform.position);
@@ -123,7 +126,7 @@ namespace EnemyBehaviour
             m_MainFSM = new MainFSM();
             m_MainFSM.AddState((int)StateTypes.IDLE, new EnemyFishState(m_MainFSM, StateTypes.IDLE, this));
             m_MainFSM.AddState((int)StateTypes.ATTACK, new EnemyFishState(m_MainFSM, StateTypes.ATTACK, this));
-            m_MainFSM.AddState((int)StateTypes.DIE, new EnemyFishState(m_MainFSM, StateTypes.DIE, this));
+            m_MainFSM.AddState((int)StateTypes.DEAD, new EnemyFishState(m_MainFSM, StateTypes.DEAD, this));
 
             Init_IdleState();
             Init_AttackState();
@@ -140,6 +143,10 @@ namespace EnemyBehaviour
             patrolPointIndex = 0;
             pathPosition = 0;
             turn = false;
+            
+            // Add the fish to the Enemy Manager
+            enemyManager = m_TargetEntity.GetComponent<EnemyManager>();
+            enemyManager.Add(this);
         }
 
         private void Update()
@@ -151,6 +158,10 @@ namespace EnemyBehaviour
             m_MainFSM.FixedUpdate();
 
             m_TimeSinceLastAttack += Time.deltaTime;
+            
+            // FIXME If the shark dies
+            // Remove the fish from the Enemy Manager
+            // enemyManager.Remove(this);
         }
 
         private void OnTriggerEnter(Collider other)
@@ -242,7 +253,7 @@ namespace EnemyBehaviour
         }
         private void Init_DieState()
         {
-            m_State = GetState(StateTypes.DIE);
+            m_State = GetState(StateTypes.DEAD);
 
             m_State.OnEnterDelegate += delegate ()
             {
