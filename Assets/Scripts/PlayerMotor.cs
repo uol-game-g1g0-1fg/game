@@ -58,18 +58,21 @@ public class PlayerMotor : MonoBehaviour {
     [SerializeField] GameObject arm;
     [SerializeField] float armSpeed = 0.3f;
     Vector3 armFullyExtendedPosition = new Vector3(0.85f, 0, 0);
-    [SerializeField] ArmState armState = ArmState.RESET;
+    [SerializeField] public ArmState armState = ArmState.RESET;
+    PickupController pickup;
     
     [Header("Events")] 
     [SerializeField] GameEvent OnCollision;
     [SerializeField] GameEvent OnEnableCore;
+    [SerializeField] GameEvent OnPickupHealth;
+    [SerializeField] GameEvent OnPickupEnergy;
+    [SerializeField] GameEvent OnPickupScore;
     [SerializeField] GameEvent OnExtendArm;
     [SerializeField] GameEvent OnRetractArm;
     [SerializeField] GameEvent OnPlayerWin;
 
     [Header("Player Stats")] 
     [SerializeField] bool enableCore = false;
-    bool hasCore = false;
 
     Camera mainCamera;
 
@@ -81,7 +84,7 @@ public class PlayerMotor : MonoBehaviour {
 
     private GameObject waterSurface;
 
-    enum ArmState {
+    public enum ArmState {
         RESET,
         EXTEND,
         RETRACT
@@ -133,16 +136,12 @@ public class PlayerMotor : MonoBehaviour {
             fixedHarpoon.SetActive(true);
         }
 
-        // Mechanical arm handle pickups
-        if (armState == ArmState.RESET) {
-            // Do something with the items retrieved
-            // Rework this system as the pickup types are expanded
-            if (hasCore && !enableCore) {
-                EnableCore();
-            }
+        // Mechanical arm handle pickup if one has been grabbed
+        if (armState == ArmState.RESET && pickup) {
+            HandlePickups();
         }
         
-        // Mechanical arm move updates
+        // Mechanical arm movement updates
         if (armState == ArmState.EXTEND && Vector3.Distance(arm.transform.position, model.transform.position) > 0.7f) {
             armState = ArmState.RETRACT;
             OnRetractArm?.Invoke();
@@ -151,6 +150,9 @@ public class PlayerMotor : MonoBehaviour {
             armState = ArmState.RESET;
             arm.transform.position = model.transform.position;
         } else if (armState == ArmState.RETRACT) {
+            RetractArm();
+        } else if (armState == ArmState.EXTEND && pickup) {
+            armState = ArmState.RETRACT;
             RetractArm();
         } else if (armState == ArmState.EXTEND) {
             ExtendArm();
@@ -169,32 +171,53 @@ public class PlayerMotor : MonoBehaviour {
 
     void OnCollisionEnter(Collision col) {
         // Do not bounce on the Floor
-        if (col.gameObject.tag != "Ground") {
-            // Calculate Angle Between the collision point and the player
-            var dir = col.contacts[0].point - transform.position;
-            // We then get the opposite (-Vector3) and normalize it
-            dir = -dir.normalized;
-            // And finally we add force in the direction of dir and multiply it by force. 
-            // This will push back the player
-            var playerForce = Mathf.Clamp(rb.velocity.magnitude, 0.02f, 1f);
-            rb.AddForce(dir * playerForce * collisionForce);
+        if (col.gameObject.tag == "Ground") return;
+        
+        // Calculate Angle Between the collision point and the player
+        var dir = col.contacts[0].point - transform.position;
+        // We then get the opposite (-Vector3) and normalize it
+        dir = -dir.normalized;
+        // And finally we add force in the direction of dir and multiply it by force. 
+        // This will push back the player
+        var playerForce = Mathf.Clamp(rb.velocity.magnitude, 0.02f, 1f);
+        rb.AddForce(dir * playerForce * collisionForce);
             
-            OnCollision?.Invoke();
-        }
+        OnCollision?.Invoke();
     }
 
     public bool IsArmExtended() {
         return armState != ArmState.RESET;
     }
 
-    void HasCore() {
-        hasCore = true;
+    public void SetPickedUpItem(PickupController item) {
+        pickup = item;
     }
-    
-    void EnableCore() {
-        Debug.Log("Enabled Core");
-        OnEnableCore?.Invoke();
-        enableCore = true;
+
+    void HandlePickups() {
+        switch (pickup.type) {
+            case PickupController.Type.CORE when !enableCore:
+                Debug.Log("Enabled Core");
+                OnEnableCore?.Invoke();
+                enableCore = true;
+                break;
+            case PickupController.Type.HEALTH:
+                Debug.Log("Grabbed a health item");
+                OnPickupHealth?.Invoke();
+                playerHealth.Heal(pickup.value);
+                break;
+            case PickupController.Type.ENERGY:
+                Debug.Log("Grabbed an energy item worth " + pickup.value);
+                OnPickupEnergy?.Invoke();
+                break;
+            case PickupController.Type.SCORE:
+                Debug.Log("Grabbed an points item that is worth " + pickup.value);
+                OnPickupScore?.Invoke();
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+
+        pickup.Consume();
     }
 
     void HandleMovement(Vector2 inputVector) {

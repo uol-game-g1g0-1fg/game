@@ -71,7 +71,7 @@ public class CameraController : MonoBehaviour {
 
     void SetVirtualCamera(int zoom) {
         for (int i = 0; i < virtualCameras.Length; i++) {
-            Debug.Log("Setting camera element " + (zoom));
+            // Debug.Log("Setting camera element " + (zoom));
             virtualCameras[i].SetActive(i == (zoom));
         }
     }
