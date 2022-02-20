@@ -170,8 +170,7 @@ namespace EnemyBehaviour
             if (m_EnemyPlantHealth.GetHealth() <= 0.0f && m_StateType != StateTypes.DEAD)
             {
                 SetState(StateTypes.DEAD);
-                // Remove the plant from the Enemy Manager
-                enemyManager.Remove(this);
+                CleanUp();
             }
         }
 
@@ -261,6 +260,29 @@ namespace EnemyBehaviour
             m_PlantProjectile.transform.LookAt(m_Player.transform.position);
             rbProjectile.AddForce(m_PlantProjectile.transform.forward * m_EnemyPlantProjectileSpeed);
             OnFire.Invoke();
+        }
+
+        private void CleanUp()
+        {
+            // Remove the plant from the Enemy Manager
+            enemyManager.Remove(this);
+
+            // Disable the plant particles
+            ParticleSystem particles = m_EnemyPlantGameObject.GetComponentInChildren<ParticleSystem>();
+            if (particles)
+            {
+                particles.Stop();
+            }
+
+            // Swap betweeen alive/dead collider positions
+            BoxCollider[] boxColliders = m_EnemyPlantGameObject.GetComponents<BoxCollider>();
+            if (boxColliders.Length > 1)
+            {
+                foreach (BoxCollider boxCollider in boxColliders)
+                {
+                    boxCollider.enabled = !boxCollider.enabled;
+                }
+            }
         }
     }
 }

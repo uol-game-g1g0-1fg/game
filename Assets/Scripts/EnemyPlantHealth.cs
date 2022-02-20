@@ -25,7 +25,7 @@ public class EnemyPlantHealth : MonoBehaviour
 
     public bool GetIsDead()
     {
-        return m_IsDead;
+        return m_Health <= 0.0f || m_IsDead;
     }
 
     // Called at the end of the animation when it hits the event tag.
