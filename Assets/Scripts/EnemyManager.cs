@@ -16,4 +16,9 @@ public class EnemyManager : MonoBehaviour {
     public bool AnyEnemyAttacking() {
         return enemies.Any(enemy => enemy.State == Enemy.StateTypes.ATTACK);
     }
+
+    // Evaluates if this enemy is attacking the player
+    public bool IsEnemyAttacking(Enemy obj) {
+        return enemies.Contains(obj) && obj.State == Enemy.StateTypes.ATTACK;
+    }
 }
