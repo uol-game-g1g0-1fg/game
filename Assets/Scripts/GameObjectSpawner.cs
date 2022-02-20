@@ -44,6 +44,9 @@ public class GameObjectSpawner : MonoBehaviour
         {
             for (int i = 0; i < m_NumberToSpawnAtPos; ++i)
             {
+                if (i >= m_Parent.transform.childCount)
+                    continue;
+
                 if (m_Parent.transform.GetChild(i).childCount >= m_MaxObjectsAtPos)
                     continue;
 
