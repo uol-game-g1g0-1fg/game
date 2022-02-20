@@ -39,7 +39,7 @@ public class Harpoon : MonoBehaviour {
 
     private static bool IsEnemyPlant(GameObject otherGameObject)
     {
-        string[] enemyPlantTags = { "EnemyPlant", "EnemyPlant2" };
+        string[] enemyPlantTags = { "EnemyPlant", "EnemyPlant1", "EnemyPlant2" };
 
         for (int i = 0; i < enemyPlantTags.Length; ++i)
         {

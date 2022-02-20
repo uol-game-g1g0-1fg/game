@@ -19,6 +19,7 @@ TagManager:
   - CameraZone
   - EnemyPlant2
   - WaterSurface
+  - EnemyPlant1
   layers:
   - Default
   - TransparentFX
