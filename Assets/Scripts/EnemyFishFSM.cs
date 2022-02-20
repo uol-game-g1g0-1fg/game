@@ -52,14 +52,16 @@ namespace EnemyBehaviour
     {
         #region Property Inspector Variables
         [Header("Enemy Settings")]
-        //[SerializeField] private GameObject m_EnemyPlantGameObject;
+        [SerializeField] private GameObject m_EnemyFishGameObject;
         //[SerializeField] private GameObject m_EnemyPlantProjectile;
         //[SerializeField] private float m_EnemyPlantProjectileSpeed;
         //[SerializeField] private float m_EnemyPlantLOSRadius;
         [SerializeField] private float m_TimeBetweenAttacks;
+        [SerializeField] private float m_EnemyFishLOSRadius;
         #endregion
 
         #region Variables
+        public Animator animator;
         public MainFSM m_MainFSM = null;
         private EnemyFishState m_State = null;
 
@@ -103,11 +105,12 @@ namespace EnemyBehaviour
 
         private bool IsWithinRange()
         {
-            //float dist = Vector3.Distance(m_TargetEntity.transform.position,m_EnemyPlantGameObject.transform.position);
-            //if (dist < m_EnemyPlantLOSRadius && GetAngleToTarget() <= m_MaxLOSDot)
-            //{
-            //     return true;
-            //}
+            float dist = Vector3.Distance(m_TargetEntity.transform.position, m_EnemyFishGameObject.transform.position);
+            Debug.Log(dist);
+            if (dist < m_EnemyFishLOSRadius)
+            {
+                 return true;
+            }
 
             return false;
         }
@@ -123,6 +126,8 @@ namespace EnemyBehaviour
 
         private void Start()
         {
+
+            animator = GetComponent<Animator>();
             m_MainFSM = new MainFSM();
             m_MainFSM.AddState((int)StateTypes.IDLE, new EnemyFishState(m_MainFSM, StateTypes.IDLE, this));
             m_MainFSM.AddState((int)StateTypes.ATTACK, new EnemyFishState(m_MainFSM, StateTypes.ATTACK, this));
@@ -212,6 +217,7 @@ namespace EnemyBehaviour
             {
                 if (IsWithinRange() && m_TimeSinceLastAttack > m_TimeBetweenAttacks)
                 {
+                    Debug.Log("ATTACK Transition");
                     SetState(StateTypes.ATTACK);
                 }
 
@@ -234,12 +240,13 @@ namespace EnemyBehaviour
 
             m_State.OnEnterDelegate += delegate ()
             {
-
+                Debug.Log("SHARK ATTACK!");
+                animator.SetBool("isAttack", true);
             };
 
             m_State.OnFixedUpdateDelegate += delegate ()
             {
-                SetState(StateTypes.IDLE);
+                //SetState(StateTypes.IDLE);
             };
 
             m_State.OnUpdateDelegate += delegate()
@@ -249,6 +256,7 @@ namespace EnemyBehaviour
             m_State.OnExitDelegate += delegate ()
             {
                 m_TimeSinceLastAttack = 0;
+                animator.SetBool("isAttack", false);
             };
         }
         private void Init_DieState()
