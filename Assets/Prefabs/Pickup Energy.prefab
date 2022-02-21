@@ -163,7 +163,7 @@ GameObject:
   - component: {fileID: 5277603336924882638}
   - component: {fileID: 5277603336924882639}
   - component: {fileID: 5277603336924882636}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Pickup Energy
   m_TagString: Pickup
   m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
@@ -177,7 +177,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5277603336924882637}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.77, y: -6.2209773, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -197,7 +197,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.3
+  m_Radius: 0.2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &5277603336924882636
 MonoBehaviour:
@@ -211,6 +211,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dac2ca002aa88b843a69060e4f6a0428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enableAnimation: 0
+  arm: {fileID: 0}
   OnPickup: {fileID: 11400000, guid: 8d592c2d1bd767a4b80813fdaa960f58, type: 2}
   value: 10
   type: 2

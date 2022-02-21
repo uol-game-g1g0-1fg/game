@@ -152,6 +152,7 @@ MonoBehaviour:
   fireRate: 0.5
   OnFire: {fileID: 11400000, guid: 37b6f0cd5e66b894ba405552c27bdb1d, type: 2}
   arm: {fileID: 7297562789321056667}
+  grabPoint: {fileID: 6060235649392199993}
   armSpeed: 0.5
   armState: 0
   OnCollision: {fileID: 11400000, guid: 0d801ab9e364c6942874acd12f5ab31d, type: 2}

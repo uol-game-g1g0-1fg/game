@@ -2,10 +2,10 @@
 
 public class PickupController : MonoBehaviour {
     float pickupRadius;
-    bool enableAnimation;
-    float magnetTime = 1.0f;
+    public bool enableAnimation;
+    float magnetTime = 0.4f;
     
-    Transform arm;
+    public Transform arm;
     PlayerMotor playerMotor;
     
     [SerializeField] GameEvent OnPickup;
@@ -35,16 +35,6 @@ public class PickupController : MonoBehaviour {
 
         this.transform.parent = arm.transform;
         transform.position = Vector3.Slerp(transform.position, arm.position, magnetTime);
-    }
-
-    void OnTriggerEnter(Collider collider) {
-        // Debug.Log("Pickup collided with " + collider.gameObject.name);
-        // Debug.Log(playerMotor.IsArmExtended());
-        if (collider.gameObject.CompareTag("MechArm") && playerMotor.IsArmExtended()) {
-            // Move the item slightly towards the arm like a magnet
-            enableAnimation = true;
-            arm = collider.gameObject.transform;
-        }
     }
 
     public void Consume() {
