@@ -56,6 +56,7 @@ public class PlayerMotor : MonoBehaviour {
 
     [Header("Mechanical Arm")] 
     [SerializeField] GameObject arm;
+    [SerializeField] Transform grabPoint;
     [SerializeField] float armSpeed = 0.3f;
     Vector3 armFullyExtendedPosition = new Vector3(0.85f, 0, 0);
     [SerializeField] public ArmState armState = ArmState.RESET;
@@ -135,8 +136,17 @@ public class PlayerMotor : MonoBehaviour {
             // Show the mounted harpoon, it is now ready to fire again
             fixedHarpoon.SetActive(true);
         }
+        
+        // Mechanical arm grabs pickup
+        LayerMask mask = LayerMask.GetMask("Pickups");
+        var hitColliders = Physics.OverlapSphere(grabPoint.position, 0.3f, mask, QueryTriggerInteraction.Collide);
+        if (hitColliders.Length > 0 && IsArmExtended()) {
+            var item = hitColliders[0].gameObject.GetComponent<PickupController>();
+            item.arm = grabPoint;
+            item.enableAnimation = true;
+        }
 
-        // Mechanical arm handle pickup if one has been grabbed
+        // Mechanical arm handle pickup if one has been grabbed and pulled all the way in
         if (armState == ArmState.RESET && pickup) {
             HandlePickups();
         }
