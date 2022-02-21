@@ -13,9 +13,13 @@ public class NotificationManager : MonoBehaviour
   private float hideAtTime = 0;
   float hideDurationSeconds = 1f;
 
+  private bool hasShownPlantMessage = false;
+  private bool hasShownPickupCoreMessage = false;
+  private bool hasShownTreasureMessage = false;
+
   void Start()
   {
-    var initial = "Your \"Explorer\" Submarine is damaged! Main engines are non-functional. Find the \"Fusion Core\" to fix it! To move use WSAD. Once it is done, you will be able to progress to the surface. Be aware of hazards! Good Luck!";
+    var initial = "Your Submarine is damaged and cannot move. Find the Fusion Core to fix it. Use WSAD keys to move, G to pick up items and F to fire your harpoon";
 
     activate(initial, 10);
   }
@@ -44,10 +48,6 @@ public class NotificationManager : MonoBehaviour
   void setOpacity(float opacity)
   {
     notificationBox.GetComponent<CanvasGroup>().alpha = opacity;
-    // var renderer = notificationBox.transform.Find("Speaker").GetComponent<RawImage>();
-    // var c = renderer.material.color;
-    // c.a = opacity;
-    // renderer.material.color = c;
   }
 
   public void activate(string value, float hideAfterSeconds)
@@ -55,5 +55,29 @@ public class NotificationManager : MonoBehaviour
     setOpacity(1);
     text.text = value;
     hideAtTime = Time.unscaledTime + hideAfterSeconds;
+  }
+
+  public void OnPlantProjectileFired()
+  {
+    if (hasShownPlantMessage) return;
+    hasShownPlantMessage = true;
+
+    activate("Watch out! Some entities are unfriendly and can cause damage to your vessel", 10);
+  }
+
+  public void OnEnableCore()
+  {
+    if (hasShownPickupCoreMessage) return;
+    hasShownPickupCoreMessage = true;
+
+    activate("Your Submarine now has a Fusion Core installed and is able to ascend to the surface!", 10);
+  }
+
+  public void OnPickupTreasure()
+  {
+    if (hasShownTreasureMessage) return;
+    hasShownTreasureMessage = true;
+
+    activate("Nice find! Looks like you found some Treasure. Pick these up to increase your Game score", 10);
   }
 }

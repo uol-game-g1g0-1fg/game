@@ -16,16 +16,15 @@ public class Notification : MonoBehaviour
 
   public float hideAfterSeconds = 10;
 
+  bool hasActivated = false;
   private NotificationManager notificationManager;
 
   void Start()
   {
-    print("Registered notification");
     notificationManager = GameObject.Find("/UI Manager").GetComponent<NotificationManager>();
 
     if (type == NotificationType.Time)
     {
-      print("time based");
       StartCoroutine(ActivateAfterDelay());
     }
   }
@@ -39,8 +38,8 @@ public class Notification : MonoBehaviour
 
   private void OnTriggerEnter(Collider other)
   {
-    if (other.tag != "Player") return;
-    print("triggered" + other.tag);
+    if (hasActivated || other.tag != "Player") return;
+    hasActivated = true;
 
     notificationManager.activate(text, hideAfterSeconds);
   }
