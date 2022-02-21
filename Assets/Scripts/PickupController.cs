@@ -3,7 +3,7 @@
 public class PickupController : MonoBehaviour {
     float pickupRadius;
     public bool enableAnimation;
-    float magnetTime = 0.4f;
+    [SerializeField] float magnetTime = 0.02f;
     
     public Transform arm;
     PlayerMotor playerMotor;
