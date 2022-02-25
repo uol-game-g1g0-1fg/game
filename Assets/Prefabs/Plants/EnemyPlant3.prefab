@@ -358,8 +358,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 0
   serializedVersion: 2
-  m_Size: {x: 0.9790391, y: 0.7555005, z: 2.1706076}
-  m_Center: {x: 0.0014976932, y: 0.31668273, z: -0.77053136}
+  m_Size: {x: 0.9790391, y: 0.7555005, z: 1.7345577}
+  m_Center: {x: 0.0014976916, y: 0.31668273, z: -0.9885528}
 --- !u!198 &1927712282616376949
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -4903,7 +4903,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: c50d77affeb31e14c9c062c282f13fc8, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5323,7 +5322,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97a08632fa0438847b2c2d8c9bef6b2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PullForce: 400
+  m_PullForce: 450
 --- !u!199 &5889580420993022621
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -5343,7 +5342,6 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
   - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -14720,7 +14718,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: c50d77affeb31e14c9c062c282f13fc8, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -19520,7 +19517,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: c50d77affeb31e14c9c062c282f13fc8, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -23,7 +23,7 @@ public class EnemyPlantHealth : MonoBehaviour
         return m_Health;
     }
 
-    public bool GetIsDead()
+    public bool IsDead()
     {
         return m_Health <= 0.0f || m_IsDead;
     }

@@ -274,7 +274,17 @@ namespace EnemyBehaviour
                 particles.Stop();
             }
 
-            // Swap betweeen alive/dead collider positions
+            StartCoroutine(SwapColliderAfterTime(1));
+        }
+
+        IEnumerator SwapColliderAfterTime(float time)
+        {
+            /*Swap betweeen alive/dead collider positions.
+              Prevents collision with outdated geometry when the plant is dead.
+              Needs to be delayed by 1s in case the player is standing on top of the plant.*/
+
+            yield return new WaitForSeconds(time);
+
             BoxCollider[] boxColliders = m_EnemyPlantGameObject.GetComponents<BoxCollider>();
             if (boxColliders.Length > 1)
             {

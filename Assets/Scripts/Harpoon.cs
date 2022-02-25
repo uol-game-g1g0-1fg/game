@@ -23,7 +23,7 @@ public class Harpoon : MonoBehaviour {
 
     private void OnCollisionEnter(Collision other)
     {
-        if (IsEnemyPlant(other.gameObject))
+        if (other.gameObject.GetComponent<EnemyPlantHealth>())
         {
             other.gameObject.GetComponent<EnemyPlantHealth>().TakeDamage(damageToEnemyPlant);
         }
@@ -35,20 +35,5 @@ public class Harpoon : MonoBehaviour {
         Instantiate(impactVFX, contact.point, Quaternion.Euler(contact.normal));
         OnHit.Invoke();
         gameObject.SetActive(false);
-    }
-
-    private static bool IsEnemyPlant(GameObject otherGameObject)
-    {
-        string[] enemyPlantTags = { "EnemyPlant", "EnemyPlant1", "EnemyPlant2" };
-
-        for (int i = 0; i < enemyPlantTags.Length; ++i)
-        {
-            if (otherGameObject.CompareTag(enemyPlantTags[i]))
-            {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

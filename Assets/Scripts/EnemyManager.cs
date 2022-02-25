@@ -21,4 +21,18 @@ public class EnemyManager : MonoBehaviour {
     public bool IsEnemyAttacking(Enemy obj) {
         return enemies.Contains(obj) && obj.State == Enemy.StateTypes.ATTACK;
     }
+
+    public bool IsEnemyPlant(Enemy obj)
+    {
+        if (!enemies.Contains(obj)) { return false; }
+
+        string[] enemyPlantTags = { "EnemyPlant", "EnemyPlant1", "EnemyPlant2" };
+
+        foreach (var tag in enemyPlantTags)
+        {
+            if (obj.CompareTag(tag))
+                return true;
+        }
+        return false;
+    }
 }

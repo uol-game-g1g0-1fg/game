@@ -75,6 +75,10 @@ public class PlayerMotor : MonoBehaviour {
     [Header("Player Stats")] 
     [SerializeField] bool enableCore = false;
 
+    [Header("Player Damage Settings")]
+    [SerializeField] float damageToPlantFromPlayerCollision = 30.0f;
+    [SerializeField] float damageToPlayerFromPlantCollision = 10.0f;
+
     Camera mainCamera;
 
     float ballast;
@@ -191,7 +195,25 @@ public class PlayerMotor : MonoBehaviour {
         // This will push back the player
         var playerForce = Mathf.Clamp(rb.velocity.magnitude, 0.02f, 1f);
         rb.AddForce(dir * playerForce * collisionForce);
-            
+
+        // Apply damage on collision with enemies
+        if (col.gameObject.GetComponent<Enemy>())
+        {
+            Enemy enemy = col.gameObject.GetComponent<Enemy>();
+            EnemyManager enemyMgr = gameObject.GetComponent<EnemyManager>();
+
+            if (enemyMgr && enemyMgr.IsEnemyPlant(enemy))
+            {
+                EnemyPlantHealth plantHealth = enemy.GetComponent<EnemyPlantHealth>();
+                if (!plantHealth.IsDead() && !playerHealth.IsDead())
+                {
+                    plantHealth.TakeDamage(damageToPlantFromPlayerCollision);
+                    playerHealth.TakeDamage(damageToPlayerFromPlantCollision);
+                }
+
+            }
+        }
+
         OnCollision?.Invoke();
     }
 
