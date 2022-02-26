@@ -6,6 +6,8 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(PlayerHealth))]
+[RequireComponent(typeof(PlayerEnergy))]
 public class PlayerMotor : MonoBehaviour {
 
     [Header("General")] 
@@ -86,6 +88,7 @@ public class PlayerMotor : MonoBehaviour {
     Rigidbody rb;
     PlayerControls playerControls;
     PlayerHealth playerHealth;
+    PlayerEnergy playerEnergy;
 
     private GameObject waterSurface;
 
@@ -100,6 +103,7 @@ public class PlayerMotor : MonoBehaviour {
         rb.freezeRotation = true;
         playerControls = new PlayerControls();
         playerHealth = GetComponent<PlayerHealth>();
+        playerEnergy = GetComponent<PlayerEnergy>();
         mainCamera = Camera.main;
         waterSurface = GameObject.FindGameObjectWithTag("WaterSurface");
 
@@ -133,6 +137,8 @@ public class PlayerMotor : MonoBehaviour {
             if (useMouseForBallast) {
                 ballast = (worldPos.y > model.transform.position.y) ? -1 : 1;
             }
+            
+            // Debug.Log(playerEnergy.Energy);
         }
 
         // Harpoon updates
@@ -240,6 +246,7 @@ public class PlayerMotor : MonoBehaviour {
             case PickupController.Type.ENERGY:
                 Debug.Log("Grabbed an energy item worth " + pickup.value);
                 OnPickupEnergy?.Invoke();
+                playerEnergy.Increase(pickup.value);
                 break;
             case PickupController.Type.SCORE:
                 Debug.Log("Grabbed an points item that is worth " + pickup.value);
@@ -262,11 +269,13 @@ public class PlayerMotor : MonoBehaviour {
             float actualYaw = ConstrainAngle(model.transform.eulerAngles.y);
             direction = (actualYaw < 0) ? -1 : 1;
         }
+
+        var actualVelocity = moveSpeed * playerEnergy.Power * playerEnergy.Velocity;
         
         if (inputVector.y > 0) {
-            rb.AddForce(transform.right * direction * moveSpeed);
+            rb.AddForce(transform.right * direction * actualVelocity);
         } else if (inputVector.y < 0) {
-            rb.AddForce(-transform.right * direction * moveSpeed);
+            rb.AddForce(-transform.right * direction * actualVelocity);
         }
 
         if (!enableCore) return;
