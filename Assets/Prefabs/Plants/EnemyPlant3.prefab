@@ -4979,6 +4979,10 @@ MonoBehaviour:
   m_TimeBetweenAttacks: 0
   OnFire: {fileID: 0}
   OnPlantDeath: {fileID: 11400000, guid: 9e4fb25cb801c6b45b634dd013dbb473, type: 2}
+  m_ProjectileSpreadRadius: 0
+  m_ProjectileScaleReductionFactor: 0
+  m_ProjectilesNumber: 0
+  m_ProjectileColour: {r: 0, g: 1, b: 0.7882353, a: 0}
   m_EnemyPlantAnimator: {fileID: 1855065722634202976}
 --- !u!1 &1855065722624679092
 GameObject:

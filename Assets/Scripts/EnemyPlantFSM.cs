@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using BehavioursFSM;
+using Random = UnityEngine.Random;
 
 namespace EnemyBehaviour
 {
@@ -61,6 +62,13 @@ namespace EnemyBehaviour
         [Header("Events")]
         [SerializeField] GameEvent OnFire;
         [SerializeField] GameEvent OnPlantDeath;
+
+        [Header("Projectile Settings")]
+        [SerializeField] private float m_ProjectileSpreadRadius;
+        [SerializeField] private float m_ProjectileScaleReductionFactor;
+        [SerializeField] private int m_ProjectilesNumber;
+        [SerializeField] private float m_ProjectileColourRange;
+        [SerializeField] private Color m_ProjectileColour;
         #endregion
 
         #region Variables
@@ -250,16 +258,33 @@ namespace EnemyBehaviour
         {
             if (!m_ClipName.Equals("RangeAttack")) { return; }
 
-            const string tag = "ProjectileSpawnPoint";
-            Vector3 projectilePos = m_ObjectSpawner.FindTransformObjectWithTag(tag, m_EnemyPlantGameObject.transform).position;
-            m_PlantProjectile = m_ObjectPoolMgr.SpawnFromPool("PlantProjectile", projectilePos, Quaternion.identity);
+            Vector3 projectilePos = m_ObjectSpawner.FindTransformObjectWithTag("ProjectileSpawnPoint", m_EnemyPlantGameObject.transform).position;
 
-            if (!m_PlantProjectile) { return; }
+            for (int i = 0; i < m_ProjectilesNumber; ++i)
+            {
+                m_PlantProjectile = m_ObjectPoolMgr.SpawnFromPool("PlantProjectile", projectilePos, Quaternion.identity);
 
-            rbProjectile = m_PlantProjectile.GetComponent<Rigidbody>();
-            m_PlantProjectile.transform.LookAt(m_Player.transform.position);
-            rbProjectile.AddForce(m_PlantProjectile.transform.forward * m_EnemyPlantProjectileSpeed);
-            OnFire.Invoke();
+                if (!m_PlantProjectile) { continue; }
+
+                // Reduce the projectile size when firing multiple ones
+                if (m_ProjectilesNumber > 1 && m_ProjectileScaleReductionFactor > 0.0f)
+                {
+                    m_PlantProjectile.transform.localScale /= m_ProjectileScaleReductionFactor;
+                }
+
+                m_PlantProjectile.GetComponent<Light>().color = m_ProjectileColour;
+                m_PlantProjectile.GetComponent<Light>().range = m_ProjectileColourRange;
+
+                float randomSpreadX = Random.Range(-1, 1);
+                float randomSpreadY = Random.Range(-1, 1);
+                Vector3 projectileSpread = new Vector3(randomSpreadX, randomSpreadY, 0.0f).normalized * m_ProjectileSpreadRadius;
+
+                m_PlantProjectile.transform.LookAt(m_Player.transform.position);
+                m_PlantProjectile.transform.Rotate(projectileSpread.x, projectileSpread.y, 0.0f);
+                rbProjectile = m_PlantProjectile.GetComponent<Rigidbody>();
+                rbProjectile.AddForce(m_PlantProjectile.transform.forward * m_EnemyPlantProjectileSpeed);
+                OnFire.Invoke();
+            }
         }
 
         private void CleanUp()
@@ -277,7 +302,7 @@ namespace EnemyBehaviour
             StartCoroutine(SwapColliderAfterTime(1));
         }
 
-        IEnumerator SwapColliderAfterTime(float time)
+        private IEnumerator SwapColliderAfterTime(float time)
         {
             /*Swap betweeen alive/dead collider positions.
               Prevents collision with outdated geometry when the plant is dead.
