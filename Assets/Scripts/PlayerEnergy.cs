@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerEnergy : MonoBehaviour {
 
-    [SerializeField] float energyReserve = 100.0f;
+    [SerializeField] public float energyReserve = 100.0f;
     [SerializeField] AnimationCurve energyRate;
     [SerializeField, Range(0.1f, 1f)] float loss = 0.1f;
     readonly float maxEnergy = 100.0f;
