@@ -89,6 +89,7 @@ GameObject:
   - component: {fileID: 2875151144201038387}
   - component: {fileID: 2875151144201038388}
   - component: {fileID: 142001335}
+  - component: {fileID: 7014947028701487242}
   - component: {fileID: 415032043}
   - component: {fileID: 8910131932529537857}
   - component: {fileID: 415032044}
@@ -164,6 +165,8 @@ MonoBehaviour:
   OnRetractArm: {fileID: 11400000, guid: fc7b70a8e89a097419e3f2d3b17dbf96, type: 2}
   OnPlayerWin: {fileID: 11400000, guid: 4ca671c0b76ea2745a4fb8c32c95a5f5, type: 2}
   enableCore: 0
+  damageToPlantFromPlayerCollision: 30
+  damageToPlayerFromPlantCollision: 10
 --- !u!114 &4412228153630045529
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -237,6 +240,52 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+--- !u!114 &7014947028701487242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2875151144201038376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cc4865fa110a9d4ea6fb8c69ef81f7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  energyRate:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.043365777
+      value: -0.5128348
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.46086976
+      value: -0.16316247
+      inSlope: 0.15135503
+      outSlope: 0.15135503
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.99931335
+      value: -0.2135849
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 1
+    m_RotationOrder: 4
+  loss: 4.4
 --- !u!114 &415032043
 MonoBehaviour:
   m_ObjectHideFlags: 0
