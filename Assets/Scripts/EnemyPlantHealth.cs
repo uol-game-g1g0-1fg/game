@@ -11,11 +11,13 @@ public class EnemyPlantHealth : MonoBehaviour
 
     #region Variables
     private bool m_IsDead = false;
+    private bool m_EnemyAttacked = false;
     #endregion
 
     public void TakeDamage(float damage)
     {
         m_Health -= damage;
+        m_EnemyAttacked = true;
     }
 
     public float GetHealth()
@@ -32,5 +34,12 @@ public class EnemyPlantHealth : MonoBehaviour
     private void SetIsDead()
     {
         m_IsDead = true;
+    }
+
+    public bool HasReceivedDamage()
+    {
+        bool enemyAttacked = m_EnemyAttacked;
+        m_EnemyAttacked = false;
+        return enemyAttacked;
     }
 }

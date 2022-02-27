@@ -181,14 +181,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1221082341900700265}
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071067}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5385645322393190439}
   m_Father: {fileID: 425710170081872941}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &1703833268500233219
 GameObject:
   m_ObjectHideFlags: 0
@@ -667,8 +667,9 @@ MonoBehaviour:
   m_EnemyPlantProjectile: {fileID: 849066391972718375, guid: feeb0ae4db0bc3146b9e667e2d5948dd,
     type: 3}
   m_EnemyPlantProjectileSpeed: 100
-  m_EnemyPlantLOSRadius: 5.5
+  m_EnemyPlantLOSRadius: 7.5
   m_TimeBetweenAttacks: 2.5
+  m_MaxLOSDot: 0.5
   OnFire: {fileID: 11400000, guid: 03428950c71d3f34db2c9a9206653835, type: 2}
   OnPlantDeath: {fileID: 11400000, guid: 9e4fb25cb801c6b45b634dd013dbb473, type: 2}
   m_ProjectileSpreadRadius: 10
@@ -770,14 +771,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6963450247832532321}
-  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalRotation: {x: -0.5, y: 0.5, z: 0.5, w: 0.5}
+  m_LocalPosition: {x: -0, y: 0, z: 0.02}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_Children:
   - {fileID: 6393305863178931153}
   m_Father: {fileID: 1439849203157417753}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 90, z: 0}
 --- !u!1 &7203402976044023830
 GameObject:
   m_ObjectHideFlags: 0
@@ -5446,7 +5447,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: c50d77affeb31e14c9c062c282f13fc8, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -77,7 +77,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   OnHit: {fileID: 11400000, guid: dcde9fcee6eb6db4c9d33ca65eed5740, type: 2}
-  damageToEnemyPlant: 50
+  damageToEnemyPlant: 35
   impactVFX: {fileID: 7589798027479785405, guid: 00cfc8f0222030b47aea0647f70ab0ed,
     type: 3}
 --- !u!1001 &7908143725439361454

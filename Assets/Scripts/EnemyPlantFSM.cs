@@ -58,6 +58,7 @@ namespace EnemyBehaviour
         [SerializeField] private float m_EnemyPlantProjectileSpeed;
         [SerializeField] private float m_EnemyPlantLOSRadius;
         [SerializeField] private float m_TimeBetweenAttacks;
+        [SerializeField] private float m_MaxLOSDot;
 
         [Header("Events")]
         [SerializeField] GameEvent OnFire;
@@ -78,11 +79,9 @@ namespace EnemyBehaviour
         private EnemyPlantState m_State = null;
         private StateTypes m_StateType;
         private EnemyPlantHealth m_EnemyPlantHealth;
-
-        private float m_MaxLOSDot = 0.2f;
         private float m_TimeSinceLastAttack = 0;
-        private Rigidbody rbProjectile;
 
+        private Rigidbody rbProjectile;
         private GameObject m_Player;
         private PlayerHealth m_PlayerHealth;
         private GameObject m_PlantProjectile;
@@ -142,9 +141,11 @@ namespace EnemyBehaviour
             m_MainFSM.AddState((int)StateTypes.IDLE, new EnemyPlantState(m_MainFSM, StateTypes.IDLE, this));
             m_MainFSM.AddState((int)StateTypes.ATTACK, new EnemyPlantState(m_MainFSM, StateTypes.ATTACK, this));
             m_MainFSM.AddState((int)StateTypes.DEAD, new EnemyPlantState(m_MainFSM, StateTypes.DEAD, this));
+            m_MainFSM.AddState((int)StateTypes.HURT, new EnemyPlantState(m_MainFSM, StateTypes.HURT, this));
 
             Init_IdleState();
             Init_AttackState();
+            Init_HurtState();
             Init_DeadState();
 
             m_ObjectPoolMgr = GameObjectPoolManager.Instance;
@@ -179,6 +180,14 @@ namespace EnemyBehaviour
             {
                 SetState(StateTypes.DEAD);
                 CleanUp();
+            }
+
+            if (m_EnemyPlantHealth.HasReceivedDamage())
+            {
+                if (m_StateType != StateTypes.DEAD && m_StateType != StateTypes.HURT)
+                {
+                    SetState(StateTypes.HURT);
+                }
             }
         }
 
@@ -237,6 +246,21 @@ namespace EnemyBehaviour
             };
         }
 
+        private void Init_HurtState()
+        {
+            m_State = GetState(StateTypes.HURT);
+
+            m_State.OnEnterDelegate += delegate ()
+            {
+                m_StateType = StateTypes.HURT;
+
+                m_EnemyPlantAnimator.SetTrigger("Hurt");
+            };
+
+            m_State.OnFixedUpdateDelegate += delegate() {};
+            m_State.OnExitDelegate += delegate () {};
+        }
+
         private void Init_DeadState()
         {
             m_State = GetState(StateTypes.DEAD);
@@ -249,8 +273,16 @@ namespace EnemyBehaviour
             };
 
             m_State.OnUpdateDelegate += delegate () {};
-
             m_State.OnExitDelegate += delegate () {};
+        }
+
+        // Called when the animation hits the clipEnded tag.
+        private void ClipEnded()
+        {
+            if (m_ClipName.Equals("Hurt"))
+            {
+                SetState(StateTypes.IDLE);
+            }
         }
 
         // Called when the animation hits the event tag.

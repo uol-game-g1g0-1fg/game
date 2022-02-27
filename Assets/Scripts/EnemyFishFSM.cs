@@ -53,9 +53,6 @@ namespace EnemyBehaviour
         #region Property Inspector Variables
         [Header("Enemy Settings")]
         [SerializeField] private GameObject m_EnemyFishGameObject;
-        //[SerializeField] private GameObject m_EnemyPlantProjectile;
-        //[SerializeField] private float m_EnemyPlantProjectileSpeed;
-        //[SerializeField] private float m_EnemyPlantLOSRadius;
         [SerializeField] private float m_TimeBetweenAttacks;
         [SerializeField] private float m_EnemyFishLOSRadius;
         #endregion
@@ -64,6 +61,7 @@ namespace EnemyBehaviour
         public Animator animator;
         public MainFSM m_MainFSM = null;
         private EnemyFishState m_State = null;
+        private StateTypes m_StateType;
 
         private float m_MaxLOSDot = 0.2f;
         private float m_TimeSinceLastAttack = 0;
@@ -99,9 +97,7 @@ namespace EnemyBehaviour
             return (EnemyFishState)m_MainFSM.GetState((int)type);
         }
 
-        public override StateTypes State {
-            get => m_State.m_StateType;
-        }
+        public override StateTypes State => m_StateType;
 
         private bool IsWithinRange()
         {
@@ -109,7 +105,7 @@ namespace EnemyBehaviour
             Debug.Log(dist);
             if (dist < m_EnemyFishLOSRadius)
             {
-                 return true;
+                return true;
             }
 
             return false;
@@ -118,7 +114,7 @@ namespace EnemyBehaviour
         private float GetAngleToTarget()
         {
             Vector3 up = m_TargetEntity.transform.TransformDirection(Vector3.up);
-            Vector3 toEnemy = Vector3.zero;//(m_EnemyPlantGameObject.transform.position - m_TargetEntity.transform.position).normalized;
+            Vector3 toEnemy = Vector3.zero;
             return Vector3.Dot(up, toEnemy);
         }
 
@@ -126,22 +122,23 @@ namespace EnemyBehaviour
 
         private void Start()
         {
-
             animator = GetComponent<Animator>();
             m_MainFSM = new MainFSM();
             m_MainFSM.AddState((int)StateTypes.IDLE, new EnemyFishState(m_MainFSM, StateTypes.IDLE, this));
             m_MainFSM.AddState((int)StateTypes.ATTACK, new EnemyFishState(m_MainFSM, StateTypes.ATTACK, this));
+            m_MainFSM.AddState((int)StateTypes.HURT, new EnemyFishState(m_MainFSM, StateTypes.HURT, this));
             m_MainFSM.AddState((int)StateTypes.DEAD, new EnemyFishState(m_MainFSM, StateTypes.DEAD, this));
 
             Init_IdleState();
             Init_AttackState();
+            Init_HurtState();
             Init_DieState();
 
             m_ObjectPoolMgr = GameObjectPoolManager.Instance;
             m_ObjectSpawner = GameObjectSpawner.Instance;
 
             // Start in the idle state by default
-            m_MainFSM.SetCurrentState(m_MainFSM.GetState((int)StateTypes.IDLE));
+            SetState(StateTypes.IDLE);
 
             m_TargetEntity = GameObject.FindGameObjectWithTag("Player");
 
@@ -209,7 +206,8 @@ namespace EnemyBehaviour
 
             m_State.OnEnterDelegate += delegate ()
             {
-                // TODO: Potentially Implement idle OnEnter logic here
+                m_StateType = StateTypes.IDLE;
+
                 currentPoint = patrolPoints[patrolPointIndex];
             };
 
@@ -228,10 +226,7 @@ namespace EnemyBehaviour
                     SlowTurn();
             };
 
-            m_State.OnExitDelegate += delegate ()
-            {
-                // TODO: Potentially Implement idle OnExit logic here
-            };
+            m_State.OnExitDelegate += delegate () {};
         }
 
         private void Init_AttackState()
@@ -240,18 +235,14 @@ namespace EnemyBehaviour
 
             m_State.OnEnterDelegate += delegate ()
             {
+                m_StateType = StateTypes.ATTACK;
+
                 Debug.Log("SHARK ATTACK!");
                 animator.SetBool("isAttack", true);
             };
 
-            m_State.OnFixedUpdateDelegate += delegate ()
-            {
-                //SetState(StateTypes.IDLE);
-            };
-
-            m_State.OnUpdateDelegate += delegate()
-            {
-            };
+            m_State.OnFixedUpdateDelegate += delegate () {};
+            m_State.OnUpdateDelegate += delegate() {};
 
             m_State.OnExitDelegate += delegate ()
             {
@@ -259,32 +250,30 @@ namespace EnemyBehaviour
                 animator.SetBool("isAttack", false);
             };
         }
+        private void Init_HurtState()
+        {
+            m_State = GetState(StateTypes.HURT);
+
+            m_State.OnEnterDelegate += delegate()
+            {
+                m_StateType = StateTypes.HURT;
+            };
+
+            m_State.OnExitDelegate += delegate () {};
+            m_State.OnUpdateDelegate += delegate () {};
+        }
+
         private void Init_DieState()
         {
             m_State = GetState(StateTypes.DEAD);
 
-            m_State.OnEnterDelegate += delegate ()
+            m_State.OnEnterDelegate += delegate()
             {
-
+                m_StateType = StateTypes.DEAD;
             };
 
-            m_State.OnExitDelegate += delegate ()
-            {
-                // TODO: Potentially Implement die OnExit logic here
-                //Debug.Log("OnExit - DIE");
-            };
-
-            m_State.OnUpdateDelegate += delegate ()
-            {
-                // TODO: Potentially Implement die OnUpdate logic here
-                //Debug.Log("OnUpdate - DIE");
-            };
-        }
-
-        // Called when the animation hits the event tag.
-        private void FireProjectile()
-        {
-
+            m_State.OnExitDelegate += delegate () {};
+            m_State.OnUpdateDelegate += delegate () {};
         }
     }
 }
