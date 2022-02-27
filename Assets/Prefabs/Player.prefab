@@ -131,14 +131,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boostSpeed: 40
-  moveSpeed: 30
-  floatSpeed: 30
+  moveSpeed: 40
+  floatSpeed: 40
   torque: 60
   maxPitch: 13.5
   useClampRotation: 1
   useControlScheme2: 1
   useSnapRotation: 1
   snapCooldownTimer: 0
+  snapSpeed: 5
   boostCooldownTimer: 4
   useMouseForLookAt: 0
   useMouseForBallast: 0
@@ -189,7 +190,7 @@ Rigidbody:
   m_GameObject: {fileID: 2875151144201038376}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 6
+  m_Drag: 8
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
@@ -252,40 +253,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cc4865fa110a9d4ea6fb8c69ef81f7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  energyReserve: 100
   energyRate:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0.043365777
-      value: -0.5128348
-      inSlope: 0
-      outSlope: 0
+      time: 0
+      value: 1.0084038
+      inSlope: 0.89887124
+      outSlope: 0.89887124
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.041840777
     - serializedVersion: 3
-      time: 0.46086976
-      value: -0.16316247
-      inSlope: 0.15135503
-      outSlope: 0.15135503
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.99931335
-      value: -0.2135849
+      time: 1.01
+      value: 1.0049973
       inSlope: 2
       outSlope: 2
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0
-    m_PreInfinity: 2
+    m_PreInfinity: 1
     m_PostInfinity: 1
     m_RotationOrder: 4
-  loss: 4.4
+  loss: 0.2
 --- !u!114 &415032043
 MonoBehaviour:
   m_ObjectHideFlags: 0
