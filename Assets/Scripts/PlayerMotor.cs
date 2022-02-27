@@ -30,6 +30,7 @@ public class PlayerMotor : MonoBehaviour {
     float snapCooldownTimer;
     float snapDirection;
     bool snapCooldown;
+    [SerializeField, Range(2, 10)] float snapSpeed = 2f;
 
     [Header("Boost Settings")]
     [SerializeField, Range(0, 10), Tooltip("Time between boost usage")] 
@@ -260,6 +261,8 @@ public class PlayerMotor : MonoBehaviour {
     }
 
     void HandleMovement(Vector2 inputVector) {
+        if (playerEnergy.Velocity <= 0) return;
+
         float direction;
         
         if (useControlScheme2) {
@@ -280,7 +283,8 @@ public class PlayerMotor : MonoBehaviour {
 
         if (!enableCore) return;
 
-        rb.AddForce(-ballast * transform.up * floatSpeed);
+        var verticalVelocity = Remap(floatSpeed * playerEnergy.Power * playerEnergy.Velocity, 0, 30, 15, 30);
+        rb.AddForce(-ballast * transform.up * verticalVelocity);
     }
 
     Vector2 RemapForControlScheme2(Vector2 inputVector) {
@@ -369,7 +373,7 @@ public class PlayerMotor : MonoBehaviour {
         // Player has been idle longer than the coroutine, snap them left or right
         if (inputVector.x == 0 && snapCooldown == false) {
             Vector3 angle = new Vector3(0, 90, 0) * snapDirection;
-            model.transform.rotation = Quaternion.Lerp(model.transform.rotation, Quaternion.Euler(angle), 2 * Time.deltaTime);
+            model.transform.rotation = Quaternion.Lerp(model.transform.rotation, Quaternion.Euler(angle), snapSpeed * Time.deltaTime);
         }
     }
 
@@ -409,7 +413,9 @@ public class PlayerMotor : MonoBehaviour {
     }
 
     void HandleBoost(InputAction.CallbackContext ctx) {
-         if (!enableCore) return;
+        if (playerEnergy.Velocity <= 0) return;
+        
+        if (!enableCore) return;
         
          if (ctx.performed && boostCooldown == false) {
              // Boost is ready and player pressed the button
@@ -468,17 +474,23 @@ public class PlayerMotor : MonoBehaviour {
     void RetractArm() {
         arm.transform.position += -model.transform.forward * Time.deltaTime * armSpeed;
     }
-    
-    float ConstrainAngle(float angle) {
+
+    static float ConstrainAngle(float angle) {
         // Handle Euler angles coming back as positive values
         // Returns a negative value representation of the angle if the angle is greater than 180 degrees
         return (angle > 180) ? angle - 360 : angle;
     }
 
+    static float Remap(float playerEnergyVelocity, float aLow, float aHigh, float bLow, float bHigh) {
+        // General re-mapping function
+        var normalized = Mathf.InverseLerp(aLow, aHigh, playerEnergyVelocity);
+        return Mathf.Lerp(bLow, bHigh, normalized);
+    }
+
     private bool ReachedSurface() {
-        Vector3 modelPos = model.transform.position;
-        Vector3 waterSurfacePos = waterSurface.transform.position;
-        float modelHalfBound = model.transform.localScale.y / 2.0f;
+        var modelPos = model.transform.position;
+        var waterSurfacePos = waterSurface.transform.position;
+        var modelHalfBound = model.transform.localScale.y / 2.0f;
 
         if (modelPos.y > (waterSurfacePos.y + modelHalfBound)) {
             Vector3 newPosition = new Vector3(modelPos.x, waterSurfacePos.y + modelHalfBound, modelPos.z);
