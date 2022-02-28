@@ -19,7 +19,7 @@ public class PlayerAudio : MonoBehaviour {
 
     void Update() {
         if (enemyManager.AnyEnemyAttacking()) {
-            battleSnapshot.TransitionTo(0.01f);
+            battleSnapshot.TransitionTo(0.1f);
             StartCoroutine(nameof(AudioSnapshotSwitchCooldown));
             canSwitchAudio = false;
         } else if (canSwitchAudio) {
