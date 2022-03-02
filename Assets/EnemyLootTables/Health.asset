@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Health
+  m_EditorClassIdentifier: Assembly-CSharp::LootTable
+  m_LootItems:
+  - m_LootItem: {fileID: 6847685568254097605, guid: 005dca2795e35f1449447e5a4d45857e,
+      type: 3}
+    m_SpawnProbability: 60
+  - m_LootItem: {fileID: 5277603336924882637, guid: cf5ba748941976741aa3b0c3ecc9ccb5,
+      type: 3}
+    m_SpawnProbability: 30
+  - m_LootItem: {fileID: 4803803087510800438, guid: 5840cfccd4782e64899099b6118721e2,
+      type: 3}
+    m_SpawnProbability: 10

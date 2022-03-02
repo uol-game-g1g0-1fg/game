@@ -20,6 +20,11 @@ TagManager:
   - EnemyPlant2
   - WaterSurface
   - EnemyPlant1
+  - CoreItem
+  - HealthItem
+  - EnergyItem
+  - TreasureItem
+  - LootSpawnPoint
   layers:
   - Default
   - TransparentFX

@@ -92,6 +92,7 @@ public class PlayerMotor : MonoBehaviour {
     PlayerEnergy playerEnergy;
 
     private GameObject waterSurface;
+    private GameObjectPoolManager objectPoolMgr;
 
     public enum ArmState {
         RESET,
@@ -115,6 +116,10 @@ public class PlayerMotor : MonoBehaviour {
         playerControls.Submarine.Ballast.canceled += HandleBallast;
         playerControls.Submarine.Harpoon.performed += FireHarpoon;
         playerControls.Submarine.Arm.performed += FireArm;
+    }
+
+    private void Start() {
+        objectPoolMgr = GameObjectPoolManager.Instance;
     }
 
     void Update() {
@@ -158,7 +163,7 @@ public class PlayerMotor : MonoBehaviour {
         }
 
         // Mechanical arm handle pickup if one has been grabbed and pulled all the way in
-        if (armState == ArmState.RESET && pickup) {
+        if (armState == ArmState.RESET && pickup && pickup.isActiveAndEnabled) {
             HandlePickups();
         }
         
@@ -172,7 +177,7 @@ public class PlayerMotor : MonoBehaviour {
             arm.transform.position = model.transform.position;
         } else if (armState == ArmState.RETRACT) {
             RetractArm();
-        } else if (armState == ArmState.EXTEND && pickup) {
+        } else if (armState == ArmState.EXTEND && pickup && pickup.isActiveAndEnabled) {
             armState = ArmState.RETRACT;
             RetractArm();
         } else if (armState == ArmState.EXTEND) {
@@ -417,22 +422,22 @@ public class PlayerMotor : MonoBehaviour {
         
         if (!enableCore) return;
         
-         if (ctx.performed && boostCooldown == false) {
-             // Boost is ready and player pressed the button
-             rb.AddForce(Vector3.up * boostSpeed, ForceMode.Impulse);
-             boostCooldown = true;
-             ballast = -1;
-             boostPressed = true;
-             StartCoroutine("BoostCooldown");
-         } else if (ctx.performed) {
-             // While the button is pressed, the player will ascend
-             ballast = -1;
-             boostPressed = true;
-         } else if (ctx.canceled) { 
-             // Player has released the button
-             ballast = 0;
-             boostPressed = false;
-         }
+        if (ctx.performed && boostCooldown == false) {
+            // Boost is ready and player pressed the button
+            rb.AddForce(Vector3.up * boostSpeed, ForceMode.Impulse);
+            boostCooldown = true;
+            ballast = -1;
+            boostPressed = true;
+            StartCoroutine("BoostCooldown");
+        } else if (ctx.performed) {
+            // While the button is pressed, the player will ascend
+            ballast = -1;
+            boostPressed = true;
+        } else if (ctx.canceled) { 
+            // Player has released the button
+            ballast = 0;
+            boostPressed = false;
+        }
     }
 
     IEnumerator BoostCooldown() {
@@ -451,9 +456,12 @@ public class PlayerMotor : MonoBehaviour {
             nextFire = Time.time + fireRate;
             
             // Hide the mounted harpoon
-            fixedHarpoon.SetActive(false);
-            // Instantiate the projectile at the position and rotation of this transform
-            var clone = Instantiate(harpoon, harpoonSpawnPoint.transform.position, transform.rotation);
+            if (fixedHarpoon) {
+                fixedHarpoon.SetActive(false);
+            }
+
+            // Spawn the projectile at the position and rotation of this transform
+            var clone = objectPoolMgr.SpawnFromPool(harpoon.tag, harpoonSpawnPoint.transform.position, transform.rotation);
             // Give the cloned object an initial velocity along the current object's Z axis
             clone.transform.Rotate(-15, 0, 0);
             clone.GetComponent<Rigidbody>().AddForce(model.transform.forward * harpoonForce);

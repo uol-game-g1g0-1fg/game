@@ -13,40 +13,40 @@ public class PullableItem : MonoBehaviour
   // Start is called before the first frame update
   void Start()
   {
-    bodies = GetComponentsInChildren<Rigidbody>();
+      bodies = GetComponentsInChildren<Rigidbody>();
   }
 
   // Update is called once per frame
   void Update()
   {
-    if (arm && isPulling)
-      rockToPull.transform.position = arm.transform.position + armOffset;
+      if (arm && isPulling)
+          rockToPull.transform.position = arm.transform.position + armOffset;
   }
 
   private void OnTriggerEnter(Collider other)
   {
-    if (other.tag == "MechArm")
-    {
-      Debug.Log("Pulling!...");
+      if (other.tag == "MechArm")
+      {
+          Debug.Log("Pulling!...");
 
-      isPulling = true;
-      arm = other;
-      armOffset = rockToPull.transform.position - arm.transform.position;
-    }
+          isPulling = true;
+          arm = other;
+          armOffset = rockToPull.transform.position - arm.transform.position;
+      }
   }
 
   private void OnTriggerExit(Collider other)
   {
-    if (other.tag == "MechArm")
-    {
-      Debug.Log("Pulling!...");
-
-      isPulling = false;
-
-      foreach (Rigidbody body in bodies)
+      if (other.tag == "MechArm")
       {
-        body.isKinematic = false;
+          Debug.Log("Pulling!...");
+
+          isPulling = false;
+
+          foreach (Rigidbody body in bodies)
+          {
+              body.isKinematic = false;
+          }
       }
-    }
   }
 }

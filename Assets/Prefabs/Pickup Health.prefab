@@ -165,7 +165,7 @@ GameObject:
   - component: {fileID: 6847685568254097604}
   m_Layer: 12
   m_Name: Pickup Health
-  m_TagString: Pickup
+  m_TagString: HealthItem
   m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

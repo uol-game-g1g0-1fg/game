@@ -37,8 +37,5 @@ public class PickupController : MonoBehaviour {
         transform.position = Vector3.Slerp(transform.position, arm.position, magnetTime);
     }
 
-    public void Consume() {
-        Destroy(this.gameObject);
-        // Other behavior here?
-    }
+    public void Consume() { gameObject.SetActive(false); }
 }
