@@ -212,6 +212,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enableAnimation: 0
+  magnetTime: 0.2
   arm: {fileID: 0}
   OnPickup: {fileID: 11400000, guid: 8d592c2d1bd767a4b80813fdaa960f58, type: 2}
   value: 10
