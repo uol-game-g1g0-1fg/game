@@ -19,7 +19,7 @@ public class NotificationManager : MainMenu
 
     void Start()
     {
-        var initial = "Your Submarine is damaged and cannot move. Find the Fusion Core to fix it.\n\nUse WSAD keys to move,\nG to pick up items\nF to fire your harpoon";
+        var initial = "Your Submarine is damaged and cannot move. Find the Fusion Core to fix it.\n\nUse WSAD keys to move,\nG to pick up items\nF to fire your harpoon\nP to pause the game";
 
         activate(initial, 10);
     }
