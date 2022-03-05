@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.Events;
 
 public class GameEventListener : MonoBehaviour {
-    
     [SerializeField] GameEvent gameEvent;
     [SerializeField] UnityEvent unityEvent;
 
@@ -13,5 +12,4 @@ public class GameEventListener : MonoBehaviour {
     void OnDestroy() => gameEvent.Deregister(this);
 
     public void RaiseEvent() => unityEvent.Invoke();
-
 }

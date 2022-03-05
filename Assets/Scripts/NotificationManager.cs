@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using UnityEngine.Events;
 
 public class NotificationManager : MainMenu
 {
     [Tooltip("Notification Prefab")]
     public GameObject notificationBox;
     public Text text;
+    public GameEvent notificationEvent;
 
     private float hideAtTime = 0;
     float hideDurationSeconds = 1f;
@@ -55,6 +56,7 @@ public class NotificationManager : MainMenu
         setOpacity(1);
         text.text = value;
         hideAtTime = Time.unscaledTime + hideAfterSeconds;
+        notificationEvent.Invoke();
     }
 
     public void OnPlantProjectileFired()

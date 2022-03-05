@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.Audio;
 
 public class PlayerAudio : MonoBehaviour {
-
     public AudioMixerSnapshot idleSnapshot;
     public AudioMixerSnapshot battleSnapshot;
 
