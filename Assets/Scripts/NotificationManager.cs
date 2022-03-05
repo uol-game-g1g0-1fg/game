@@ -17,6 +17,7 @@ public class NotificationManager : MainMenu
     private bool hasShownPlantMessage = false;
     private bool hasShownPickupCoreMessage = false;
     private bool hasShownTreasureMessage = false;
+    private bool hasShownEnergyMessage = false;
 
     void Start()
     {
@@ -81,5 +82,13 @@ public class NotificationManager : MainMenu
         hasShownTreasureMessage = true;
 
         activate("Nice find! Looks like you found some Treasure. Pick these up to increase your Game score", 10);
+    }
+
+    public void OnPickupEnergy()
+    {
+        if (hasShownEnergyMessage) return;
+        hasShownEnergyMessage = true;
+
+        activate("That's an Energy item - it will restore the Ship's Energy levels", 10);
     }
 }
