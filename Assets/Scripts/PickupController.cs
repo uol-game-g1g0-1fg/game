@@ -7,8 +7,8 @@ public class PickupController : MonoBehaviour {
     
     public Transform arm;
     PlayerMotor playerMotor;
+    Rigidbody rb;
     
-    [SerializeField] GameEvent OnPickup;
     [SerializeField] public float value = 10f;
 
     public enum Type {
@@ -22,19 +22,20 @@ public class PickupController : MonoBehaviour {
 
     void Awake() {
         playerMotor = GameObject.FindWithTag("Player").GetComponent<PlayerMotor>();
+        arm = GameObject.FindWithTag("MechArm").transform;
     }
     
     void Update() {
         if (!enableAnimation) return;
 
-        if (Vector3.Distance(transform.position, arm.transform.position) < .1f) {
+        if (Vector3.Distance(transform.position, arm.transform.position) < .5f) {
             // When the pickup is close enough to the arm, change it's state.  It has been picked up.
             playerMotor.SetPickedUpItem(this);
             return;
         }
 
         this.transform.parent = arm.transform;
-        transform.position = Vector3.Slerp(transform.position, arm.position, magnetTime);
+        transform.position = Vector3.Lerp(transform.position, arm.position, magnetTime);
     }
 
     public void Consume() { gameObject.SetActive(false); }

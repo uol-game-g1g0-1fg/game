@@ -254,6 +254,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   energyReserve: 100
+  lowEnergyThreshold: 60
   energyRate:
     serializedVersion: 2
     m_Curve:
@@ -278,7 +279,8 @@ MonoBehaviour:
     m_PreInfinity: 1
     m_PostInfinity: 1
     m_RotationOrder: 4
-  loss: 0.2
+  loss: 0.4
+  OnPlayerDeath: {fileID: 11400000, guid: 43d681480f1a02a4caf2e2c35810ec29, type: 2}
 --- !u!114 &415032043
 MonoBehaviour:
   m_ObjectHideFlags: 0

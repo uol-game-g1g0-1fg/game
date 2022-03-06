@@ -463,7 +463,7 @@ public class PlayerMotor : MonoBehaviour {
             // Spawn the projectile at the position and rotation of this transform
             var clone = objectPoolMgr.SpawnFromPool(harpoon.tag, harpoonSpawnPoint.transform.position, transform.rotation);
             // Give the cloned object an initial velocity along the current object's Z axis
-            clone.transform.Rotate(-15, 0, 0);
+            clone.transform.Rotate(15, (snapDirection == 1) ? 180 : 0, 0);
             clone.GetComponent<Rigidbody>().AddForce(model.transform.forward * harpoonForce);
             OnFire?.Invoke();
         }
