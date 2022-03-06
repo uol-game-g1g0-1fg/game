@@ -164,13 +164,10 @@ namespace EnemyBehaviour {
             m_State.OnUpdateDelegate += delegate () {
                 if (IsWithinRange() && m_TimeSinceLastAttack > m_TimeBetweenAttacks) {
                     // FIXME
-                    // Debug.Log("ATTACK Transition");
                     // SetState(StateTypes.ATTACK);
                 }
 
                 movementVelocity += 0.1f * movementSpeed * Time.deltaTime;
-                // FIXME cap the velocity
-                // Debug.Log("Moving the shark at velocity: " + movementVelocity + " distance: " + Vector3.Distance(transform.position, currentPoint.transform.position));
                 transform.position = Vector3.Slerp(transform.position, currentPoint.transform.position, movementVelocity);
                 
                 // Create the rotation we need to be in to look at the target
