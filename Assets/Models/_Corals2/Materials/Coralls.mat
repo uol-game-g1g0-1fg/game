@@ -111,6 +111,8 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _Tiling: 1
+    - _TilingX: 1
+    - _TilingY: 1
     - _UVSec: 0
     - _ZWrite: 1
     - __dirty: 0
