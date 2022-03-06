@@ -692,7 +692,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Health: 100
-  m_LootTable: {fileID: 11400000, guid: 3345ac69be0e5064c99f42b0451c2e60, type: 2}
+  m_LootTable: {fileID: 11400000, guid: 740b1a33f74084646a74c56d3d2ca37f, type: 2}
 --- !u!65 &525040983263422294
 BoxCollider:
   m_ObjectHideFlags: 0
