@@ -4,19 +4,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using BehavioursFSM;
 
-namespace EnemyBehaviour
-{
-    public class EnemyFishState : IState
-    {
+namespace EnemyBehaviour {
+    public class EnemyFishState : IState {
         #region Variables
-        protected EnemyFishFSM m_EnemyFSM;
-        public EnemyFishFSM.StateTypes m_StateType;
+
+        EnemyFishFSM m_EnemyFSM;
+        readonly Enemy.StateTypes m_StateType;
         #endregion
 
-        public EnemyFishFSM.StateTypes StateType => m_StateType;
+        public Enemy.StateTypes StateType => m_StateType;
 
-        public EnemyFishState(MainFSM fsm, EnemyFishFSM.StateTypes type, EnemyFishFSM enemyFSM) : base(fsm)
-        {
+        public EnemyFishState(MainFSM fsm, Enemy.StateTypes type, EnemyFishFSM enemyFSM) : base(fsm) {
             m_EnemyFSM = enemyFSM;
             m_StateType = type;
         }
@@ -27,101 +25,78 @@ namespace EnemyBehaviour
         public StateDelegate OnFixedUpdateDelegate { get; set; } = null;
         public StateDelegate OnUpdateDelegate { get; set; } = null;
 
-        public override void Enter()
-        {
-            OnEnterDelegate?.Invoke();
-        }
+        public override void Enter() => OnEnterDelegate?.Invoke();
 
-        public override void FixedUpdate()
-        {
-            OnFixedUpdateDelegate?.Invoke();
-        }
+        public override void FixedUpdate() => OnFixedUpdateDelegate?.Invoke();
 
-        public override void Update()
-        {
-            OnUpdateDelegate?.Invoke();
-        }
+        public override void Update() => OnUpdateDelegate?.Invoke();
 
-        public override void Exit()
-        {
-            OnExitDelegate?.Invoke();
-        }
+        public override void Exit() => OnExitDelegate?.Invoke();
     }
 
-    public class EnemyFishFSM : Enemy
-    {
+    public class EnemyFishFSM : Enemy {
         #region Property Inspector Variables
         [Header("Enemy Settings")]
-        [SerializeField] private GameObject m_EnemyFishGameObject;
-        [SerializeField] private float m_TimeBetweenAttacks;
-        [SerializeField] private float m_EnemyFishLOSRadius;
+        [SerializeField] GameObject m_EnemyFishGameObject;
+        [SerializeField] float m_TimeBetweenAttacks;
+        [SerializeField] float m_EnemyFishLOSRadius;
         #endregion
 
         #region Variables
         public Animator animator;
         public MainFSM m_MainFSM = null;
-        private EnemyFishState m_State = null;
-        private StateTypes m_StateType;
+        public EnemyFishState m_State = null;
+        public StateTypes m_StateType;
 
-        private float m_MaxLOSDot = 0.2f;
-        private float m_TimeSinceLastAttack = 0;
-        private Rigidbody rbProjectile;
+        float m_MaxLOSDot = 0.2f;
+        float m_TimeSinceLastAttack = 0;
+        Rigidbody rbProjectile;
 
-        private GameObject m_TargetEntity;
-        private GameObject m_PlantProjectile;
+        GameObject m_TargetEntity;
+        GameObject m_PlantProjectile;
 
-        private string m_ClipName;
-        private AnimatorClipInfo[] m_CurrentClipInfo;
-        private GameObjectPoolManager m_ObjectPoolMgr;
-        private GameObjectSpawner m_ObjectSpawner;
+        string m_ClipName;
+        AnimatorClipInfo[] m_CurrentClipInfo;
+        GameObjectPoolManager m_ObjectPoolMgr;
+        GameObjectSpawner m_ObjectSpawner;
 
         //path
         [SerializeField] public GameObject[] patrolPoints;
-        private int patrolPointIndex;
-        private float pathPosition;
-        private GameObject currentPoint;
-        [SerializeField] public float speed;
-        private float currentRotation;
-        [SerializeField] public float rotationSpeed;
-        private bool turn;
+        int patrolPointIndex;
+        GameObject currentPoint;
+        [SerializeField, Tooltip("Movement speed while patrolling")] float movementSpeed;
+        float movementVelocity;
+        [SerializeField, Tooltip("Rotation speed of the shark at patrol points")] float rotationSpeed = 50f;
         #endregion
 
         #region Helpers
-        private void SetState(StateTypes type)
-        {
+        void SetState(StateTypes type) {
             m_MainFSM.SetCurrentState(m_MainFSM.GetState((int)type));
         }
 
-        private EnemyFishState GetState(StateTypes type)
-        {
+        EnemyFishState GetState(StateTypes type) {
             return (EnemyFishState)m_MainFSM.GetState((int)type);
         }
 
         public override StateTypes State => m_StateType;
 
-        private bool IsWithinRange()
-        {
-            float dist = Vector3.Distance(m_TargetEntity.transform.position, m_EnemyFishGameObject.transform.position);
-            Debug.Log(dist);
-            if (dist < m_EnemyFishLOSRadius)
-            {
-                return true;
-            }
+        bool IsWithinRange() {
+            var dist = Vector3.Distance(m_TargetEntity.transform.position, m_EnemyFishGameObject.transform.position);
 
-            return false;
+            if (!(dist < m_EnemyFishLOSRadius)) return false;
+            // Debug.Log(dist);
+            return true;
         }
 
-        private float GetAngleToTarget()
-        {
-            Vector3 up = m_TargetEntity.transform.TransformDirection(Vector3.up);
-            Vector3 toEnemy = Vector3.zero;
+        float GetAngleToTarget() {
+            var up = m_TargetEntity.transform.TransformDirection(Vector3.up);  // what is happening here?
+            var toEnemy = Vector3.zero;
             return Vector3.Dot(up, toEnemy);
         }
 
         #endregion
 
-        private void Start()
-        {
+        void Start() {
             animator = GetComponent<Animator>();
             m_MainFSM = new MainFSM();
             m_MainFSM.AddState((int)StateTypes.IDLE, new EnemyFishState(m_MainFSM, StateTypes.IDLE, this));
@@ -143,20 +118,18 @@ namespace EnemyBehaviour
             m_TargetEntity = GameObject.FindGameObjectWithTag("Player");
 
             patrolPointIndex = 0;
-            pathPosition = 0;
-            turn = false;
+            movementVelocity = 0;
             
             // Add the fish to the Enemy Manager
             enemyManager = m_TargetEntity.GetComponent<EnemyManager>();
             enemyManager.Add(this);
         }
 
-        private void Update()
-        {
+        void Update() {
             m_MainFSM.Update();
         }
-        private void FixedUpdate()
-        {
+        
+        void FixedUpdate() {
             m_MainFSM.FixedUpdate();
 
             m_TimeSinceLastAttack += Time.deltaTime;
@@ -166,75 +139,52 @@ namespace EnemyBehaviour
             // enemyManager.Remove(this);
         }
 
-        private void OnTriggerEnter(Collider other)
-        {
-            if(other.tag == "PatrolPoint")
-            {
-                //Debug.Log(other.name);
+        void OnTriggerEnter(Collider other) {
+            if (other.CompareTag("PatrolPoint")) {
+                Debug.Log(other.name);
                 if (patrolPointIndex < patrolPoints.Length - 1)
                     patrolPointIndex += 1;
                 else
                     patrolPointIndex = 0;
 
                 currentPoint = patrolPoints[patrolPointIndex];
-                pathPosition = 0.0f;
-
-                // add turn animation ?
-                currentRotation = 0.0f;
-                turn = true;
+                movementVelocity = 0.0f;
             }
            
         }
 
-        private void SlowTurn()
-        {
-            //pathPosition = 0;
-            currentRotation += rotationSpeed * Time.deltaTime;
-
-            transform.Rotate(0, rotationSpeed * Time.deltaTime, 0);
-
-            if(currentRotation >= 180)
-            {
-                currentRotation = 0;
-                turn = false;
-            }
-        }
-
-        private void Init_IdleState()
-        {
+        void Init_IdleState() {
             m_State = GetState(StateTypes.IDLE);
 
-            m_State.OnEnterDelegate += delegate ()
-            {
+            m_State.OnEnterDelegate += delegate () {
                 m_StateType = StateTypes.IDLE;
-
                 currentPoint = patrolPoints[patrolPointIndex];
             };
 
-            m_State.OnUpdateDelegate += delegate ()
-            {
-                if (IsWithinRange() && m_TimeSinceLastAttack > m_TimeBetweenAttacks)
-                {
-                    Debug.Log("ATTACK Transition");
-                    SetState(StateTypes.ATTACK);
+            m_State.OnUpdateDelegate += delegate () {
+                if (IsWithinRange() && m_TimeSinceLastAttack > m_TimeBetweenAttacks) {
+                    // FIXME
+                    // Debug.Log("ATTACK Transition");
+                    // SetState(StateTypes.ATTACK);
                 }
 
-                pathPosition += 0.001f * speed * Time.deltaTime;
-                //Debug.Log(pathPosition);
-                transform.position = Vector3.Lerp(transform.position, currentPoint.transform.position, pathPosition);
-                if (turn)
-                    SlowTurn();
+                movementVelocity += 0.1f * movementSpeed * Time.deltaTime;
+                // FIXME cap the velocity
+                // Debug.Log("Moving the shark at velocity: " + movementVelocity + " distance: " + Vector3.Distance(transform.position, currentPoint.transform.position));
+                transform.position = Vector3.Slerp(transform.position, currentPoint.transform.position, movementVelocity);
+                
+                // Create the rotation we need to be in to look at the target
+                var lookRotation = Quaternion.LookRotation((currentPoint.transform.position - transform.position).normalized);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
             };
-
+            
             m_State.OnExitDelegate += delegate () {};
         }
 
-        private void Init_AttackState()
-        {
+        void Init_AttackState() {
             m_State = GetState(StateTypes.ATTACK);
 
-            m_State.OnEnterDelegate += delegate ()
-            {
+            m_State.OnEnterDelegate += delegate () {
                 m_StateType = StateTypes.ATTACK;
 
                 Debug.Log("SHARK ATTACK!");
@@ -244,18 +194,15 @@ namespace EnemyBehaviour
             m_State.OnFixedUpdateDelegate += delegate () {};
             m_State.OnUpdateDelegate += delegate() {};
 
-            m_State.OnExitDelegate += delegate ()
-            {
+            m_State.OnExitDelegate += delegate () {
                 m_TimeSinceLastAttack = 0;
                 animator.SetBool("isAttack", false);
             };
         }
-        private void Init_HurtState()
-        {
+        void Init_HurtState() {
             m_State = GetState(StateTypes.HURT);
 
-            m_State.OnEnterDelegate += delegate()
-            {
+            m_State.OnEnterDelegate += delegate() {
                 m_StateType = StateTypes.HURT;
             };
 
@@ -263,12 +210,10 @@ namespace EnemyBehaviour
             m_State.OnUpdateDelegate += delegate () {};
         }
 
-        private void Init_DieState()
-        {
+        void Init_DieState() {
             m_State = GetState(StateTypes.DEAD);
 
-            m_State.OnEnterDelegate += delegate()
-            {
+            m_State.OnEnterDelegate += delegate() {
                 m_StateType = StateTypes.DEAD;
             };
 
