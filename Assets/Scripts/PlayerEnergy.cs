@@ -19,9 +19,12 @@ public class PlayerEnergy : MonoBehaviour {
 
     private NotificationManager notificationManager;
 
+    public int energy;
+
     void Start()
     {
         notificationManager = GameObject.Find("/UI Manager").GetComponent<NotificationManager>();
+        energy = (int) energyReserve;
     }
 
     void Update() {
@@ -41,6 +44,8 @@ public class PlayerEnergy : MonoBehaviour {
         {
             OnPlayerDeath.Invoke();
         }
+
+        energy = (int) energyReserve;
     }
 
     public void Increase(float amount) {
