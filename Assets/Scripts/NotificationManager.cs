@@ -19,7 +19,7 @@ public class NotificationManager : MainMenu
 
     void Start()
     {
-        var initial = "Your Submarine is damaged and cannot move. Find the Fusion Core to fix it. Use WSAD keys to move, G to pick up items and F to fire your harpoon";
+        var initial = "Your Submarine is damaged and cannot move. Find the Fusion Core to fix it.\n\nUse WSAD keys to move,\nG to pick up items\nF to fire your harpoon\nP to pause the game";
 
         activate(initial, 10);
     }
@@ -62,7 +62,7 @@ public class NotificationManager : MainMenu
         if (hasShownPlantMessage) return;
         hasShownPlantMessage = true;
 
-        activate("Watch out! Some entities are unfriendly and can cause damage to your vessel", 10);
+        activate("Watch out! Some entities are unfriendly and can cause damage to your Ship", 10);
     }
 
     public void OnEnableCore()
@@ -70,7 +70,7 @@ public class NotificationManager : MainMenu
         if (hasShownPickupCoreMessage) return;
         hasShownPickupCoreMessage = true;
 
-        activate("Your Submarine now has a Fusion Core installed and is able to ascend to the surface!", 10);
+        activate("Your Submarine now has a Fusion Core installed and is able to ascend to the surface!\n\nTo ascend, use the W key\nSPACE bar to use the Ship's boost", 10);
     }
 
     public void OnPickupTreasure()
