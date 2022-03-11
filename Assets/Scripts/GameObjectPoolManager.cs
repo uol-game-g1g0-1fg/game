@@ -64,6 +64,7 @@ public class GameObjectPoolManager : MonoBehaviour
         // Add this object back to the queue so it can be reused
         poolDictionary[tag].Enqueue(objectToSpawn);
 
+        Debug.Log(objectToSpawn);
         return objectToSpawn;
     }
 

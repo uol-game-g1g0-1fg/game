@@ -65,7 +65,7 @@ public class needleUpdate : MonoBehaviour
     {
 
         setDepth(player.transform.position.y);
-        Debug.Log("depth: " + targetDepth);
+        // Debug.Log("depth: " + targetDepth);
 
         if (targetDepth != currentDepth)
         {

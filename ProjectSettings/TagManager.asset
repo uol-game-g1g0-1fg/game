@@ -25,6 +25,7 @@ TagManager:
   - EnergyItem
   - TreasureItem
   - LootSpawnPoint
+  - EnemyFish
   layers:
   - Default
   - TransparentFX

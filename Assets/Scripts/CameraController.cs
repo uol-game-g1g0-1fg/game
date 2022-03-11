@@ -28,7 +28,7 @@ public class CameraController : MonoBehaviour {
     }
     
     void Update() {
-        Debug.Log(canSwitchCamera);
+        // Debug.Log(canSwitchCamera);
         if (enemyManager.AnyEnemyAttacking()) {
             Debug.Log("Enemy Attacking");
             HandleCameraZoom(CameraZone.CameraDistance.Near);

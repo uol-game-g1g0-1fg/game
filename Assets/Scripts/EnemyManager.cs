@@ -35,4 +35,16 @@ public class EnemyManager : MonoBehaviour {
         }
         return false;
     }
+    public bool IsEnemyFish(Enemy obj)
+    {
+        if (!enemies.Contains(obj)) { return false; }
+
+        string[] enemyPlantTags = { "EnemyFish" };
+
+        foreach (var tag in enemyPlantTags) {
+            if (obj.CompareTag(tag))
+                return true;
+        }
+        return false;
+    }
 }
