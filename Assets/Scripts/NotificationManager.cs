@@ -18,6 +18,7 @@ public class NotificationManager : MainMenu
     private bool hasShownPickupCoreMessage = false;
     private bool hasShownTreasureMessage = false;
     private bool hasShownEnergyMessage = false;
+    private bool hasShownHealthMessage = false;
 
     void Start()
     {
@@ -90,5 +91,13 @@ public class NotificationManager : MainMenu
         hasShownEnergyMessage = true;
 
         activate("That's an Energy item - it will restore the Ship's Energy levels", 10);
+    }
+
+    public void OnPickupHealth()
+    {
+        if (hasShownHealthMessage) return;
+        hasShownHealthMessage = true;
+
+        activate("That's a Health item - it will restore the Ship's Health levels", 10);
     }
 }

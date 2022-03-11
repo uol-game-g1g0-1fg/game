@@ -13,25 +13,31 @@ public class Harpoon : MonoBehaviour {
     [SerializeField] float damageToEnemyPlant;
     
     [Header("Particle Effect")]
-    [SerializeField] ParticleSystem impactVFX;
+    [SerializeField] ParticleSystem[] impactVFX;
     #endregion
-
-    private void Update()
-    {
-        //Debug.Log(GetComponent<Rigidbody>().velocity);
-    }
 
     private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.GetComponent<EnemyPlantHealth>()) {
+        ParticleSystem impactVFXSelected = impactVFX[0];
+
+        if (other.gameObject.GetComponent<EnemyPlantHealth>())
+        {
             other.gameObject.GetComponent<EnemyPlantHealth>().TakeDamage(damageToEnemyPlant);
+
+            foreach (var particle in impactVFX)
+            {
+                if (other.gameObject.CompareTag(particle.tag))
+                {
+                    impactVFXSelected = particle;
+                }
+            }
         }
 
         Debug.Log("Harpoon hit: " + other.gameObject.name);
         
         // Instantiate a small particle effect
         var contact = other.contacts[0];
-        Instantiate(impactVFX, contact.point, Quaternion.Euler(contact.normal));
+        Instantiate(impactVFXSelected, contact.point, Quaternion.Euler(contact.normal));
         OnHit.Invoke();
         gameObject.SetActive(false);
     }
