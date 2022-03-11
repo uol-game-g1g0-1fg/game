@@ -528,7 +528,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Health: 100
-  m_LootTable: {fileID: 11400000, guid: 3bd460e9967fc39479c93dfc51757724, type: 2}
+  m_LootTable: {fileID: 11400000, guid: 18389561959417b4db7363adf3b3297e, type: 2}
 --- !u!1 &7642012253225114942
 GameObject:
   m_ObjectHideFlags: 0
