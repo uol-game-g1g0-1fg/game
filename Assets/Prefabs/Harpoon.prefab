@@ -80,9 +80,9 @@ MonoBehaviour:
   damageToEnemyPlant: 35
   impactVFX:
   - {fileID: 7589798027479785405, guid: 00cfc8f0222030b47aea0647f70ab0ed, type: 3}
-  - {fileID: 1904028152419879574, guid: 0af05f7d02829d442a3930dabbf8af68, type: 3}
+  - {fileID: 1904028152419879574, guid: e3f2388cb87ff1442a24d0d41282ce03, type: 3}
   - {fileID: 1904028152419879574, guid: f482d024d373cbb43af045d73ab15736, type: 3}
-  - {fileID: 1904028152419879574, guid: 89c0b40e71580d649bb36e6992009f6c, type: 3}
+  - {fileID: 1904028152419879574, guid: c642b62425aef2247800b15f03bb247c, type: 3}
   - {fileID: 3752496402394092831, guid: 10f62b1c6d5f56d4c8ecd3a62449cdfc, type: 3}
 --- !u!1001 &7908143725439361454
 PrefabInstance:
