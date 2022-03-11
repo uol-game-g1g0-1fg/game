@@ -36,10 +36,10 @@ public class EnemyPlantHealth : MonoBehaviour
     public bool IsDead() { return m_Health <= 0.0f || m_IsDead; }
 
     // Called at the end of the animation when it hits the event tag.
-    private void SetIsDead()
+    public void SetIsDead()
     {
+        if (!m_IsDead) GenerateLoot();
         m_IsDead = true;
-        GenerateLoot();
     }
 
     public bool HasReceivedDamage()
@@ -53,7 +53,7 @@ public class EnemyPlantHealth : MonoBehaviour
     {
         if (!m_LootTable) { return; }
 
-        GameObject lootItem = m_LootTable.GetLootItem();
+        var lootItem = m_LootTable.GetLootItem();
         if (!lootItem) { return; }
 
         m_LootSpawnPoint = m_ObjectSpawner.FindTransformObjectWithTag("LootSpawnPoint", transform).position;

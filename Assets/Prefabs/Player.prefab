@@ -93,6 +93,7 @@ GameObject:
   - component: {fileID: 415032043}
   - component: {fileID: 8910131932529537857}
   - component: {fileID: 415032044}
+  - component: {fileID: 471766158323690686}
   - component: {fileID: 415032050}
   m_Layer: 9
   m_Name: Player
@@ -336,6 +337,33 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 10
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &471766158323690686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2875151144201038376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b85c4721f34f2604d8e0eec9af3f5131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameEvent: {fileID: 11400000, guid: 50af1dae1dcd7ca49ab1c50ec0bf5fdc, type: 2}
+  unityEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 415032043}
+        m_MethodName: TakeDamage
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 15
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2

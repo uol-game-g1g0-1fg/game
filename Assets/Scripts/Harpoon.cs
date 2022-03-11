@@ -23,8 +23,7 @@ public class Harpoon : MonoBehaviour {
 
     private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.GetComponent<EnemyPlantHealth>())
-        {
+        if (other.gameObject.GetComponent<EnemyPlantHealth>()) {
             other.gameObject.GetComponent<EnemyPlantHealth>().TakeDamage(damageToEnemyPlant);
         }
 

@@ -38,8 +38,10 @@ namespace EnemyBehaviour {
         #region Property Inspector Variables
         [Header("Enemy Settings")]
         [SerializeField] GameObject m_EnemyFishGameObject;
+        Rigidbody rb;
         [SerializeField] float m_TimeBetweenAttacks;
         [SerializeField] float m_EnemyFishLOSRadius;
+        [SerializeField] float m_EnemyFishBreakOffRadius;
         #endregion
 
         #region Variables
@@ -47,6 +49,8 @@ namespace EnemyBehaviour {
         public MainFSM m_MainFSM = null;
         public EnemyFishState m_State = null;
         public StateTypes m_StateType;
+        [SerializeField] GameEvent OnBite;
+        EnemyPlantHealth enemyHealth;
 
         float m_MaxLOSDot = 0.2f;
         float m_TimeSinceLastAttack = 0;
@@ -80,13 +84,7 @@ namespace EnemyBehaviour {
 
         public override StateTypes State => m_StateType;
 
-        bool IsWithinRange() {
-            var dist = Vector3.Distance(m_TargetEntity.transform.position, m_EnemyFishGameObject.transform.position);
-
-            if (!(dist < m_EnemyFishLOSRadius)) return false;
-            // Debug.Log(dist);
-            return true;
-        }
+        bool IsWithinRange(float range) => (Vector3.Distance(m_TargetEntity.transform.position, m_EnemyFishGameObject.transform.position) < range);
 
         float GetAngleToTarget() {
             var up = m_TargetEntity.transform.TransformDirection(Vector3.up);  // what is happening here?
@@ -104,6 +102,8 @@ namespace EnemyBehaviour {
             m_MainFSM.AddState((int)StateTypes.HURT, new EnemyFishState(m_MainFSM, StateTypes.HURT, this));
             m_MainFSM.AddState((int)StateTypes.DEAD, new EnemyFishState(m_MainFSM, StateTypes.DEAD, this));
 
+            rb = gameObject.GetComponent<Rigidbody>();
+
             Init_IdleState();
             Init_AttackState();
             Init_HurtState();
@@ -116,6 +116,7 @@ namespace EnemyBehaviour {
             SetState(StateTypes.IDLE);
 
             m_TargetEntity = GameObject.FindGameObjectWithTag("Player");
+            enemyHealth = gameObject.GetComponent<EnemyPlantHealth>();
 
             patrolPointIndex = 0;
             movementVelocity = 0;
@@ -134,14 +135,29 @@ namespace EnemyBehaviour {
 
             m_TimeSinceLastAttack += Time.deltaTime;
             
-            // FIXME If the shark dies
-            // Remove the fish from the Enemy Manager
-            // enemyManager.Remove(this);
+            if (enemyHealth.GetHealth() <= 40) {
+                // FIXME could make the shark flee?
+                // SetState(StateTypes.HURT);
+            }
+            
+            if (enemyHealth.GetHealth() <= 0) {
+                SetState(StateTypes.DEAD);
+                
+                // Remove the fish from the Enemy Manager
+                enemyManager.Remove(this);
+                
+                // Death Animation
+                animator.enabled = false;
+                enemyHealth.SetIsDead();
+                rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
+                rb.isKinematic = false;
+                rb.rotation = Quaternion.Slerp(rb.transform.rotation, Quaternion.Euler(0, 0,-180), 0.5f * Time.deltaTime);
+            }
         }
 
         void OnTriggerEnter(Collider other) {
             if (other.CompareTag("PatrolPoint")) {
-                Debug.Log(other.name);
+                Debug.Log("Trigger Patrol Point: " + other.name);
                 if (patrolPointIndex < patrolPoints.Length - 1)
                     patrolPointIndex += 1;
                 else
@@ -158,13 +174,13 @@ namespace EnemyBehaviour {
 
             m_State.OnEnterDelegate += delegate () {
                 m_StateType = StateTypes.IDLE;
+                Debug.Log(patrolPoints);
                 currentPoint = patrolPoints[patrolPointIndex];
             };
 
             m_State.OnUpdateDelegate += delegate () {
-                if (IsWithinRange() && m_TimeSinceLastAttack > m_TimeBetweenAttacks) {
-                    // FIXME
-                    // SetState(StateTypes.ATTACK);
+                if (IsWithinRange(m_EnemyFishLOSRadius) && m_TimeSinceLastAttack > m_TimeBetweenAttacks) {
+                    SetState(StateTypes.ATTACK);
                 }
 
                 movementVelocity += 0.1f * movementSpeed * Time.deltaTime;
@@ -178,6 +194,12 @@ namespace EnemyBehaviour {
             m_State.OnExitDelegate += delegate () {};
         }
 
+        void Bite() {
+            if (IsWithinRange(4)) {
+                OnBite?.Invoke();
+            }
+        }
+
         void Init_AttackState() {
             m_State = GetState(StateTypes.ATTACK);
 
@@ -189,7 +211,17 @@ namespace EnemyBehaviour {
             };
 
             m_State.OnFixedUpdateDelegate += delegate () {};
-            m_State.OnUpdateDelegate += delegate() {};
+            m_State.OnUpdateDelegate += delegate() {
+                if (!IsWithinRange(m_EnemyFishBreakOffRadius)) {
+                    SetState(StateTypes.IDLE);
+                    return;
+                }
+                
+                transform.position = Vector3.Slerp(transform.position, m_TargetEntity.transform.position, movementVelocity);
+                
+                var lookRotation = Quaternion.LookRotation((m_TargetEntity.transform.position - transform.position).normalized);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
+            };
 
             m_State.OnExitDelegate += delegate () {
                 m_TimeSinceLastAttack = 0;

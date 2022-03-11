@@ -214,15 +214,20 @@ public class PlayerMotor : MonoBehaviour {
             Enemy enemy = col.gameObject.GetComponent<Enemy>();
             EnemyManager enemyMgr = gameObject.GetComponent<EnemyManager>();
 
-            if (enemyMgr && enemyMgr.IsEnemyPlant(enemy))
-            {
-                EnemyPlantHealth plantHealth = enemy.GetComponent<EnemyPlantHealth>();
-                if (!plantHealth.IsDead() && !playerHealth.IsDead())
-                {
+            if (enemyMgr && enemyMgr.IsEnemyPlant(enemy)) {
+                var plantHealth = enemy.GetComponent<EnemyPlantHealth>();
+                if (!plantHealth.IsDead() && !playerHealth.IsDead()) {
                     plantHealth.TakeDamage(damageToPlantFromPlayerCollision);
                     playerHealth.TakeDamage(damageToPlayerFromPlantCollision);
                 }
-
+            }
+            
+            if (enemyMgr && enemyMgr.IsEnemyFish(enemy)) {
+                var plantHealth = enemy.GetComponent<EnemyPlantHealth>();
+                if (!plantHealth.IsDead() && !playerHealth.IsDead()) {
+                    plantHealth.TakeDamage(15);
+                    playerHealth.TakeDamage(15);
+                }
             }
         }
 
