@@ -14,11 +14,12 @@ public class MainMenu : MonoBehaviour
 
     #region Variables
     public static bool m_IsGamePaused = false;
+    public static bool m_IsShowingCanvas = false;
     #endregion
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.P) && !m_IsShowingCanvas)
         {
             if (m_IsGamePaused)
             {
@@ -47,6 +48,8 @@ public class MainMenu : MonoBehaviour
 
     public void StartGame()
     {
+        m_IsShowingCanvas = false;
+
         SceneManager.LoadScene("GameMap");
     }
 
@@ -65,6 +68,8 @@ public class MainMenu : MonoBehaviour
     {
         if (m_ShowOnDeath)
         {
+            m_IsShowingCanvas = true;
+
             m_ShowOnDeath.SetActive(true);
         }
     }
@@ -84,6 +89,8 @@ public class MainMenu : MonoBehaviour
     {
         if (m_ShowOnWin)
         {
+            m_IsShowingCanvas = true;
+
             m_ShowOnWin.SetActive(true);
         }
     }

@@ -23,9 +23,9 @@ public class ScoreTextUpdate : MonoBehaviour
         score = GameObject.Find("Player").GetComponent<PlayerScore>().playerScore;
 
         if(score == 0){
-            finalScoreText.text = "You didn't find any treasures on your journey to the surface.";
+            finalScoreText.text = "You didn't find any treasures on your journey.";
         }else{
-            finalScoreText.text = "You found a total of " + score.ToString() + " treasures on your journey to the surface!";
+            finalScoreText.text = "Treasures Collected: " + score.ToString();
         }
 
     }
