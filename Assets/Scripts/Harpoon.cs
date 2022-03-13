@@ -20,9 +20,9 @@ public class Harpoon : MonoBehaviour {
     {
         ParticleSystem impactVFXSelected = impactVFX[0];
 
-        if (other.gameObject.GetComponent<EnemyPlantHealth>())
+        if (other.gameObject.GetComponent<EnemyHealth>())
         {
-            other.gameObject.GetComponent<EnemyPlantHealth>().TakeDamage(damageToEnemyPlant);
+            other.gameObject.GetComponent<EnemyHealth>().TakeDamage(damageToEnemyPlant);
 
             foreach (var particle in impactVFX)
             {

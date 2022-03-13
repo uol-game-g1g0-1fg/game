@@ -50,7 +50,7 @@ namespace EnemyBehaviour {
         public EnemyFishState m_State = null;
         public StateTypes m_StateType;
         [SerializeField] GameEvent OnBite;
-        EnemyPlantHealth enemyHealth;
+        EnemyHealth enemyHealth;
 
         float m_MaxLOSDot = 0.2f;
         float m_TimeSinceLastAttack = 0;
@@ -116,7 +116,7 @@ namespace EnemyBehaviour {
             SetState(StateTypes.IDLE);
 
             m_TargetEntity = GameObject.FindGameObjectWithTag("Player");
-            enemyHealth = gameObject.GetComponent<EnemyPlantHealth>();
+            enemyHealth = gameObject.GetComponent<EnemyHealth>();
 
             patrolPointIndex = 0;
             movementVelocity = 0;
@@ -151,6 +151,7 @@ namespace EnemyBehaviour {
                 enemyHealth.SetIsDead();
                 rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
                 rb.isKinematic = false;
+                rb.mass = 500;
                 rb.rotation = Quaternion.Slerp(rb.transform.rotation, Quaternion.Euler(0, 0,-180), 0.5f * Time.deltaTime);
             }
         }

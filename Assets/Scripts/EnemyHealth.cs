@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyPlantHealth : MonoBehaviour
+public class EnemyHealth : MonoBehaviour
 {
     #region Property Inspector Variables
     [Header("Enemy Plant Health")]

@@ -78,7 +78,7 @@ namespace EnemyBehaviour
 
         private EnemyPlantState m_State = null;
         private StateTypes m_StateType;
-        private EnemyPlantHealth m_EnemyPlantHealth;
+        private EnemyHealth mEnemyHealth;
         private float m_TimeSinceLastAttack = 0;
 
         private Rigidbody rbProjectile;
@@ -157,7 +157,7 @@ namespace EnemyBehaviour
 
             m_Player = GameObject.FindGameObjectWithTag("Player");
             m_PlayerHealth = m_Player.GetComponent<PlayerHealth>();
-            m_EnemyPlantHealth = m_EnemyPlantGameObject.GetComponent<EnemyPlantHealth>();
+            mEnemyHealth = m_EnemyPlantGameObject.GetComponent<EnemyHealth>();
             
             // Add the plant to the Enemy Manager
             enemyManager = m_Player.GetComponent<EnemyManager>();
@@ -177,12 +177,12 @@ namespace EnemyBehaviour
             m_CurrentClipInfo = m_EnemyPlantAnimator.GetCurrentAnimatorClipInfo(0);
             m_ClipName = m_CurrentClipInfo[0].clip.name;
 
-            if (m_EnemyPlantHealth.GetHealth() <= 0.0f && m_StateType != StateTypes.DEAD)
+            if (mEnemyHealth.GetHealth() <= 0.0f && m_StateType != StateTypes.DEAD)
             {
                 SetState(StateTypes.DEAD);
             }
 
-            if (m_EnemyPlantHealth.HasReceivedDamage())
+            if (mEnemyHealth.HasReceivedDamage())
             {
                 if (m_StateType != StateTypes.DEAD && m_StateType != StateTypes.HURT)
                 {
