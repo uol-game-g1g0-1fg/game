@@ -25,7 +25,7 @@ public class ScoreTextUpdate : MonoBehaviour
         if(score == 0){
             finalScoreText.text = "You didn't find any treasures on your journey.";
         }else{
-            finalScoreText.text = "Treasures Collected: " + score.ToString();
+            finalScoreText.text = "Treasures Collected: " + score.ToString() + "/5";
         }
 
     }
