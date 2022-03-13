@@ -15,10 +15,4 @@ MonoBehaviour:
   m_LootItems:
   - m_LootItem: {fileID: 6847685568254097605, guid: 005dca2795e35f1449447e5a4d45857e,
       type: 3}
-    m_SpawnProbability: 60
-  - m_LootItem: {fileID: 5277603336924882637, guid: cf5ba748941976741aa3b0c3ecc9ccb5,
-      type: 3}
-    m_SpawnProbability: 30
-  - m_LootItem: {fileID: 4803803087510800438, guid: 5840cfccd4782e64899099b6118721e2,
-      type: 3}
-    m_SpawnProbability: 10
+    m_SpawnProbability: 100

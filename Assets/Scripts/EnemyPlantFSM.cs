@@ -90,6 +90,7 @@ namespace EnemyBehaviour
         private AnimatorClipInfo[] m_CurrentClipInfo;
         private GameObjectPoolManager m_ObjectPoolMgr;
         private GameObjectSpawner m_ObjectSpawner;
+        private bool bStartedBoxColliderSwap = false;
         #endregion
 
         #region Helpers
@@ -179,7 +180,6 @@ namespace EnemyBehaviour
             if (m_EnemyPlantHealth.GetHealth() <= 0.0f && m_StateType != StateTypes.DEAD)
             {
                 SetState(StateTypes.DEAD);
-                CleanUp();
             }
 
             if (m_EnemyPlantHealth.HasReceivedDamage())
@@ -270,6 +270,7 @@ namespace EnemyBehaviour
                 m_StateType = StateTypes.DEAD;
                 m_EnemyPlantAnimator.SetTrigger("Death");
                 OnPlantDeath.Invoke();
+                CleanUp();
             };
 
             m_State.OnUpdateDelegate += delegate () {};
@@ -331,7 +332,12 @@ namespace EnemyBehaviour
                 particles.Stop();
             }
 
-            StartCoroutine(SwapColliderAfterTime(1));
+            // Make sure the coroutine only runs once
+            if (!bStartedBoxColliderSwap)
+            {
+                StartCoroutine(SwapColliderAfterTime(1));
+                bStartedBoxColliderSwap = true;
+            }
         }
 
         private IEnumerator SwapColliderAfterTime(float time)

@@ -15,7 +15,7 @@ MonoBehaviour:
   m_LootItems:
   - m_LootItem: {fileID: 6847685568254097605, guid: 005dca2795e35f1449447e5a4d45857e,
       type: 3}
-    m_SpawnProbability: 70
+    m_SpawnProbability: 50
   - m_LootItem: {fileID: 5277603336924882637, guid: cf5ba748941976741aa3b0c3ecc9ccb5,
       type: 3}
-    m_SpawnProbability: 30
+    m_SpawnProbability: 50
