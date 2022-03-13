@@ -21,7 +21,7 @@ public class ForceField : MonoBehaviour
 
         if (m_Enemy)
         {
-            if (m_Enemy.GetComponent<EnemyPlantHealth>().IsDead() || !other.GetComponent<EnemyManager>().IsEnemyAttacking(m_Enemy))
+            if (m_Enemy.GetComponent<EnemyHealth>().IsDead() || !other.GetComponent<EnemyManager>().IsEnemyAttacking(m_Enemy))
                 return;
         }
 

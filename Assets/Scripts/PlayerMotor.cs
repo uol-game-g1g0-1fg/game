@@ -215,7 +215,7 @@ public class PlayerMotor : MonoBehaviour {
             EnemyManager enemyMgr = gameObject.GetComponent<EnemyManager>();
 
             if (enemyMgr && enemyMgr.IsEnemyPlant(enemy)) {
-                var plantHealth = enemy.GetComponent<EnemyPlantHealth>();
+                var plantHealth = enemy.GetComponent<EnemyHealth>();
                 if (!plantHealth.IsDead() && !playerHealth.IsDead()) {
                     plantHealth.TakeDamage(damageToPlantFromPlayerCollision);
                     playerHealth.TakeDamage(damageToPlayerFromPlantCollision);
@@ -223,7 +223,7 @@ public class PlayerMotor : MonoBehaviour {
             }
             
             if (enemyMgr && enemyMgr.IsEnemyFish(enemy)) {
-                var plantHealth = enemy.GetComponent<EnemyPlantHealth>();
+                var plantHealth = enemy.GetComponent<EnemyHealth>();
                 if (!plantHealth.IsDead() && !playerHealth.IsDead()) {
                     plantHealth.TakeDamage(15);
                     playerHealth.TakeDamage(15);
